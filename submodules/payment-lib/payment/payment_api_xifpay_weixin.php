@@ -1,0 +1,62 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api_xifpay.php';
+
+/**
+ *
+ * * XIFPAY_WEIXIN_PAYMENT_API, ID: 566
+ *
+ * Required Fields:
+ * * URL
+ * * Account
+ * * Key
+ *
+ * Field Values:
+ * * URL: https://ebank.xifpay.com 
+ * * Account: ## Merchant ID ##
+ * * Key: ## Secret Key ##
+ *
+ * * Extra Info:
+ * > {
+ * >    "sellerEmail" : "## Seller email address, system will show you when the merchant opens ##"
+ * > }
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+class Payment_api_xifpay_weixin extends Abstract_payment_api_xifpay {
+
+	public function getPlatformCode() {
+		return XIFPAY_WEIXIN_PAYMENT_API;
+	}
+
+	public function getPrefix() {
+		return 'xifpay_weixin';
+	}
+
+	protected function configParams(&$params, $direct_pay_extra_info) {
+		
+		if($this->CI->utils->is_mobile()) {
+			$params['defaultbank'] = self::DEFAULTNANK_WEIXIN;
+			$params['isApp'] = 'h5';
+		}else{
+			$params['defaultbank'] = self::DEFAULTNANK_WEIXIN;
+			$params['isApp'] = 'app';
+		}
+
+	}
+	
+	# Hide bank selection drop-down
+	public function getPlayerInputInfo() {
+		return array(
+			array('name' => 'deposit_amount', 'type' => 'float_amount', 'label_lang' => 'cashier.09'),
+		);
+	}
+
+	protected function processPaymentUrlForm($params) {
+		if($this->CI->utils->is_mobile()) {
+			return $this->processPaymentUrlFormPost($params);
+		}else{
+			return $this->processPaymentUrlFormQRCode($params);
+		}
+	}	
+}

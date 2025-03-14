@@ -1,0 +1,663 @@
+stages:
+  - build
+  - "temp staging game"
+  - "temp prod game"
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+  GOOGLE_ACCOUNT: "sbecloudflare1@gmail.com"
+  GOOGLE_PROJECT_NAME: "externalgateway-167009"
+  GOOGLE_LIVE_K8S_NAME: "t1tog"
+  GOOGLE_STAGING_K8S_NAME: "t1togstaging"
+  GOOGLE_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_STAGING_K8S_ZONE: "asia-east1-b"
+  GOOGLE_T1TBR_K8S_NAME: "t1togbr"
+  GOOGLE_T1TBR_K8S_ZONE: "southamerica-east1-c"
+
+  GOOGLE_KGVIPEN_PROJECT_NAME: "ibetg-164502"
+  GOOGLE_KGVIPEN_LIVE_K8S_NAME: "kgvipen"
+  GOOGLE_KGVIPEN_STAGING_K8S_NAME: "kgvipenstaging"
+  GOOGLE_KGVIPEN_LIVE_K8S_ZONE: "europe-west2-c"
+  GOOGLE_KGVIPEN_STAGING_K8S_ZONE: "europe-west2-b"
+
+  GOOGLE_KGVIPCN_PROJECT_NAME: "ibetg-164502"
+  GOOGLE_KGVIPCN_LIVE_K8S_NAME: "kgvip"
+  GOOGLE_KGVIPCN_STAGING_K8S_NAME: "kgvipstaging"
+  GOOGLE_KGVIPCN_LIVE_K8S_ZONE: "asia-east1-b"
+  GOOGLE_KGVIPCN_STAGING_K8S_ZONE: "asia-east1-a"
+
+  GOOGLE_WINROXY_PROJECT_NAME: "winroxy"
+  GOOGLE_WINROXY_LIVE_K8S_NAME: "winroxy"
+  GOOGLE_WINROXY_STAGING_K8S_NAME: "winroxy"
+  GOOGLE_WINROXY_LIVE_K8S_ZONE: "europe-west2-c"
+  GOOGLE_WINROXY_STAGING_K8S_ZONE: "europe-west2-c"
+
+  GOOGLE_ACCOUNT_SHEN168: "shen168k8s@gmail.com"
+  GOOGLE_SHEN168_PROJECT_NAME: "shen168-202505"
+  GOOGLE_SHEN168_LIVE_K8S_NAME: "shen168-1"
+  GOOGLE_SHEN168_STAGING_K8S_NAME: "shen168staging"
+  GOOGLE_SHEN168_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_SHEN168_STAGING_K8S_ZONE: "asia-east1-a"
+
+  # GOOGLE_IDNGAME_LIVE_K8S_NAME: "idngame"
+  # GOOGLE_IDNGAME_STAGING_K8S_NAME: "idngamestaging"
+
+  GOOGLE_ACCOUNT_LABA360: "laba360k8s@gmail.com"
+  GOOGLE_LABA360_PROJECT_NAME: "cedar-lexicon-210408"
+  GOOGLE_LABA360_LIVE_K8S_NAME: "laba360"
+  GOOGLE_LABA360_STAGING_K8S_NAME: "laba360"
+  GOOGLE_LABA360_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_LABA360_STAGING_K8S_ZONE: "asia-east1-a"
+
+  GOOGLE_EM_PROJECT_NAME: "sc001-em"
+  GOOGLE_EM_LIVE_K8S_NAME: "emog"
+  GOOGLE_EM_STAGING_K8S_NAME: "emog"
+  GOOGLE_EM_LIVE_K8S_ZONE: "asia-east1-b"
+  GOOGLE_EM_STAGING_K8S_ZONE: "asia-east1-b"
+
+build_system:
+  stage: build
+  script:
+    - bash check_php_syntax.sh
+    - php gamelist_json_validation.php
+    - bash run_cli.sh validate_php_opening_tag
+
+.job_temp_game_staging_template: &deploy_k8s_tmp_game_staging
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_STAGING_K8S_NAME -z $GOOGLE_STAGING_K8S_ZONE
+  when: manual
+
+.job_temp_game_prod_template: &deploy_k8s_tmp_game_prod
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE
+  when: manual
+
+# -----------rainbow---------------------
+rainbow-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "rainbowstaging"
+
+rainbow-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "rainbow"
+
+# -----------lotterydemo---------------------
+lotterydemo-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "lotterydemostaging"
+
+lotterydemo-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "lotterydemo"
+
+# -----------caishen888---------------------
+fengsheng-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "caishen888staging"
+
+fengsheng-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "caishen888"
+# -----------gamegateway---------------------
+gamegateway-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "gamegatewaystaging"
+
+gamegateway-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "gamegateway"
+
+# -----------onestop---------------------
+onestop-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "onestopstaging"
+
+onestop-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "onestop"
+
+# -----------demo1---------------------
+demo1-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "demo1"
+
+# -----------demo2---------------------
+demo2-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "demo2"
+
+# -----------demo3---------------------
+demo3-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "demo3"
+
+# -----------tailai---------------------
+tailai-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "tailaistaging"
+
+tailai-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "tailai"
+
+# -----------ole777---------------------
+ole777-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "ole777staging"
+
+ole777-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "ole777"
+
+# -----------ole777idn---------------------
+ole777idn-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "ole777idnstaging"
+
+ole777idn-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "ole777idn"
+
+# -----------ole777thb---------------------
+ole777thb-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "ole777thbstaging"
+
+ole777thb-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "ole777thb"
+
+# -----------yinhe---------------------
+yinhe-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "yinhestaging"
+
+yinhe-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "yinhe"
+
+# -----------guide---------------------
+guide-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "guidestaging"
+
+guide-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "guide"
+
+# -----------bigbet999---------------------
+lovebet-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "bigbet999staging"
+
+lovebet-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "bigbet999"
+
+# -----------sexycasino---------------------
+sexycasino-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "sexycasinostaging"
+
+sexycasino-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "sexycasino"
+
+# -----------tianhong---------------------
+tianhong-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "tianhongstaging"
+
+tianhong-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "tianhong"
+
+# -----------dj002---------------------
+dj002-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "dj002staging"
+
+dj002-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "dj002"
+# -----------bitplay88---------------------
+bitplay88-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "bitplay88staging"
+
+bitplay88-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "bitplay88"
+# -----------whatsbet---------------------
+whatsbet-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "whatsbetstaging"
+
+whatsbet-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "whatsbet"
+
+# -----------ole777vnd---------------------
+ole777vnd-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "ole777vndstaging"
+
+ole777vnd-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "ole777vnd"
+
+# -----------ole777vndclient---------------------
+ole777vndclient-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "ole777vndclientstaging"
+
+# -----------wilson---------------------
+wilson-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "wilsonstaging"
+
+wilson-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "wilson"
+
+# -----------win102---------------------
+win102-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "win102staging"
+
+win102-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "win102"
+
+# -----------tripleonetech---------------------
+tripleonetech-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "tripleonetechstaging"
+
+tripleonetech-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "tripleonetech"
+
+# -----------mbrand---------------------
+mbrand-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "mbrandstaging"
+
+
+# -----------fastplay---------------------
+fastplay-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "fastplaystaging"
+
+fastplay-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "fastplay"
+
+
+
+# -----------seamlessgateway---------------------
+seamlessgateway-temp-staging-game:
+  <<: *deploy_k8s_tmp_game_staging
+  variables:
+    CLIENT_NAME: "seamlessgatewaystaging"
+
+seamlessgateway-temp-prod-game:
+  <<: *deploy_k8s_tmp_game_prod
+  variables:
+    CLIENT_NAME: "seamlessgateway"
+
+
+# -----------smash---------------------
+smash-temp-staging-game:
+  variables:
+    CLIENT_NAME: "smashstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+smash-temp-stagingstable-game:
+  variables:
+    CLIENT_NAME: "smashstagingstable"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+smash-temp-prod-game:
+  variables:
+    CLIENT_NAME: "smash"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+# -----------sambabet---------------------
+
+sambabet-temp-staging-game:
+  variables:
+    CLIENT_NAME: "sambabetstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+sambabet-temp-stagingstable-game:
+  variables:
+    CLIENT_NAME: "sambabetstagingstable"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+sambabet-temp-prod-game:
+  variables:
+    CLIENT_NAME: "sambabet"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+# -----------igmbet---------------------
+
+igmbet-temp-staging-game:
+  variables:
+    CLIENT_NAME: "igmbetstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+igmbet-temp-prod-game:
+  variables:
+    CLIENT_NAME: "igmbet"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+  
+# -----------kash777---------------------
+
+kash777-temp-staging-game:
+  variables:
+    CLIENT_NAME: "kash777staging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+kash777-temp-prod-game:
+  variables:
+    CLIENT_NAME: "kash777"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+# -----------abet---------------------
+
+abet-temp-staging-game:
+  variables:
+    CLIENT_NAME: "abetstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+abet-temp-prod-game:
+  variables:
+    CLIENT_NAME: "abet"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+
+# -----------brlgateway---------------------
+
+brlgateway-temp-staging-game:
+  variables:
+    CLIENT_NAME: "brlgatewaystaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+brlgateway-temp-prod-game:
+  variables:
+    CLIENT_NAME: "brlgateway"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+# -----------t1bet---------------------
+
+t1bet-temp-staging-game:
+  variables:
+    CLIENT_NAME: "t1betstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+t1bet-temp-prod-game:
+  variables:
+    CLIENT_NAME: "t1bet"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+# -----------r99---------------------
+
+r99-temp-staging-game:
+  variables:
+    CLIENT_NAME: "r99staging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+r99-temp-prod-game:
+  variables:
+    CLIENT_NAME: "r99"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+
+# -----------magebet---------------------
+
+#magebet-temp-staging-game:
+#  variables:
+#    CLIENT_NAME: "magebetstaging"
+#  stage: "temp staging game"
+#  script:
+#    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+#  when: manual
+
+#magebet-temp-prod-game:
+#  variables:
+#    CLIENT_NAME: "magebet"
+#  stage: "temp prod game"
+#  script:
+#    - bash check_deploy_permission.sh
+#    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+#  when: manual
+
+# -----------king(betacai)---------------------
+
+betacai-temp-staging-game:
+  variables:
+    CLIENT_NAME: "kingstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+betacai-temp-prod-game:
+  variables:
+    CLIENT_NAME: "king"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TBR_K8S_NAME -z $GOOGLE_T1TBR_K8S_ZONE
+  when: manual
+
+
+# -----------kinggaming---------------------
+
+kinggaming-temp-staging-game:
+  variables:
+    CLIENT_NAME: "kgvipenstaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_STAGING_K8S_NAME -z $GOOGLE_KGVIPEN_STAGING_K8S_ZONE
+  when: manual
+
+kinggaming-temp-prod-game:
+  variables:
+    CLIENT_NAME: "kgvipen"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE
+  when: manual
+
+
+#idngame-temp-staging-game:
+#  variables:
+#    CLIENT_NAME: "idngamestaging"
+#  stage: "temp staging game"
+#  script:
+#    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT_SHEN168 -p $GOOGLE_SHEN168_PROJECT_NAME -k $GOOGLE_SHEN168_STAGING_K8S_NAME -z $GOOGLE_SHEN168_STAGING_K8S_ZONE
+#  when: manual
+
+#idngame-temp-prod-game:
+#  variables:
+#    CLIENT_NAME: "idngame"
+#  stage: "temp prod game"
+#  script:
+#    - bash check_deploy_permission.sh
+#    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT_SHEN168 -p $GOOGLE_SHEN168_PROJECT_NAME -k $GOOGLE_SHEN168_LIVE_K8S_NAME -z $GOOGLE_SHEN168_LIVE_K8S_NAME
+#  when: manual
+
+# -----------winroxy---------------------
+
+winroxy-temp-staging-game:
+  variables:
+    CLIENT_NAME: "winroxystaging"
+  stage: "temp staging game"
+  script:
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_WINROXY_PROJECT_NAME -k $GOOGLE_WINROXY_STAGING_K8S_NAME -z $GOOGLE_WINROXY_STAGING_K8S_ZONE
+  when: manual
+
+winroxy-temp-prod-game:
+  variables:
+    CLIENT_NAME: "winroxy"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_WINROXY_PROJECT_NAME -k $GOOGLE_WINROXY_LIVE_K8S_NAME -z $GOOGLE_WINROXY_LIVE_K8S_ZONE
+  when: manual
+
+# -----------for em config---------------------
+em-temp-staging-game:
+  variables:
+    CLIENT_NAME: "emstaging"
+  stage: "temp staging game"
+  script:
+     bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_EM_PROJECT_NAME -k $GOOGLE_EM_STAGING_K8S_NAME -z $GOOGLE_EM_STAGING_K8S_ZONE
+  when: manual
+
+em-temp-prod-game:
+  variables:
+    CLIENT_NAME: "em"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_EM_PROJECT_NAME -k $GOOGLE_EM_LIVE_K8S_NAME -z $GOOGLE_EM_LIVE_K8S_ZONE
+  when: manual
+
+# -----------for demomdb config---------------------
+demomdb-temp-staging-game:
+  variables:
+    CLIENT_NAME: "demomdbstaging"
+  stage: "temp staging game"
+  script:
+     bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_EM_PROJECT_NAME -k $GOOGLE_T1TUK_K8S_NAME -z $GOOGLE_T1TUK_K8S_ZONE
+  when: manual
+
+demomdb-temp-prod-game:
+  variables:
+    CLIENT_NAME: "demomdb"
+  stage: "temp prod game"
+  script:
+    - bash check_deploy_permission.sh
+    - bash run_cli.sh temp_deploy_game -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_EM_PROJECT_NAME -k $GOOGLE_T1TUK_K8S_NAME -z $GOOGLE_T1TUK_K8S_ZONE
+  when: manual
+
+

@@ -1,0 +1,2 @@
+var manual_payment_exoclick_script = '<script type="application/javascript" src="https://a.exoclick.com/tag_gen.js" data-goal="12f275dd8383f5a20d1a66855c295062"></script>';
+$('head').append(manual_payment_exoclick_script);

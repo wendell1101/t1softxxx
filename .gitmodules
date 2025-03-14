@@ -1,0 +1,9 @@
+[submodule "submodules/core-lib"]
+	path = submodules/core-lib
+	url = git@git.smartbackend.com:core/core-lib.git
+[submodule "submodules/payment-lib"]
+	path = submodules/payment-lib
+	url = git@git.smartbackend.com:core/payment-lib.git
+[submodule "submodules/game-lib"]
+	path = submodules/game-lib
+	url = git@git.smartbackend.com:core/game-lib.git

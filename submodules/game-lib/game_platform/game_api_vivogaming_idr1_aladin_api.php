@@ -1,0 +1,35 @@
+<?php require_once dirname(__FILE__) . '/abstract_game_api_common_vivo_gaming.php';
+
+class Game_api_vivogaming_idr1_aladin_api extends Abstract_game_api_common_vivo_gaming{
+    
+    const CURRENCY_TYPE = "IDR";
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->currency_type = self::CURRENCY_TYPE;
+    }
+
+    /**
+     * Get Platform code of Game API
+     * 
+     * @return int game platform code
+    */
+    public function getPlatformCode()
+    {
+        return VIVOGAMING_IDR_B1_ALADIN_API;
+    }
+
+    /**
+     * Get original game logs table
+     * 
+     *@return string original game logs table in database
+    */
+    public function getOriginalTable()
+    {
+        // return 'vivo_gaming_idr1_aladin_game_logs';
+        return $this->getSystemInfo('original_table', 'vivo_gaming_idr1_aladin_game_logs');
+    }
+}
+/** end of file */

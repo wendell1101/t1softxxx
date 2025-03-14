@@ -1,0 +1,54 @@
+<?php
+$lang['notify.80'] = "O horário do seu depósito não atende aos requisitos.";
+
+$lang['One username is only allowed to send %s texts per day, please try again tomorrow.'] = "Um nome de usuário só pode enviar %s mensagens por dia, por favor, tente novamente amanhã";
+$lang['The contact number has been used'] = "O número de contato já foi utilizado. <br>Por favor, verifique o seu número ou entre em contato com o nosso serviço de atendimento ao cliente.";
+$lang['Captcha code invalid'] = 'Código de captcha inválido.';
+$lang['notify.3'] = "O nome de usuário já existe. Por favor, escolha outro nome de usuário.";
+$lang['notify.5'] = "O email já existe. Por favor, escolha outro email.";
+$lang['Failed to verify, please try it again or contact customer service for assistance'] = 'A verificação falhou, por favor, tente novamente ou entre em contato com o serviço de atendimento ao cliente para obter assistência.';
+$lang['Your player level is not valid in this promo']="Seu nível de jogador não é válido nesta promoção.";
+$lang['Input email address does not belong to the current player'] = 'O endereço de e-mail inserido não pertence ao jogador atual';
+$lang['Input phone number does not belong to the current player'] = 'O número de telefone inserido não pertence ao jogador atual';
+$lang['notify.68'] = "O nome de usuário não existe!";
+$lang['notify.96'] = "Sucesso Nós enviamos com sucesso a verificação por e-mail para você.";
+$lang['Captcha invalid or empty'] = 'Captcha inválido ou vazio.';
+$lang['notify.83'] = "Você já se candidatou para a promoção e não pode se candidatar novamente.";
+$lang['promo.dont_allow_request_promo_from_same_ips']='A promoção não permite solicitar a promoção do mesmo IP';
+$lang['notify.46'] = "Você excedeu o valor máximo de depósito!";
+$lang['notify.43'] = "Você não atendeu ao requisito de valor mínimo de depósito!";
+$lang['notify.56'] = "Seu pedido de valor excede o limite diário de saque máximo.";
+$lang['Max Withdrawal Per Transaction is'] = 'O Saque Máximo por Transação é de ';
+$lang['notify.102'] = "Seu pedido de valor de saque não deve ser inferior a ";
+$lang['The resource owner or authorization server denied the request.'] = "O proprietário do recurso ou o servidor de autorização negou o pedido.";
+
+$lang['validation.lengthRangeContent'] = "";
+$lang['Recharge'] = 'Recarga';
+$lang['Users'] = 'Usuário';
+$lang['validation.availabilityUsername_checking'] = 'Verificando o nome de usuário';
+$lang['Welcome to SAMBA, you can enjoy the following exclusive offers for new players! Go and collect your prize!'] = "Bem-vindo ao SSSBET, você pode desfrutar das seguintes ofertas exclusivas para novos jogadores!";
+$lang['redemptionCode.apply.useLimit'] = 'O código de resgate atual está incorreto, use um código de resgate válido.';
+$lang['redemptionCode.apply.applySuccess'] = 'O resgate foi bem-sucedido, %s BRL foram creditados.';
+$lang['redemptionCode.apply'] = 'Resgatar';
+$lang['redemptionCode.redemptionCode'] = 'Resgatar código';
+$lang['Transaction History'] = "Histórico de transação";
+$lang['friendReferral.earnedBonus'] = 'Bônus Total';
+$lang['friendReferral.countAvlibleReferral'] = 'Eficaz';
+$lang['Withdrawal Amount'] = 'Quantidade retirada';
+$lang['Referral Program'] = 'Programa de referência';
+$lang['cashier.withdrawal.withdraw_condition.hint'] = 'O sistema leva cerca de 30 minutos para atualiza.';
+$lang['Email address entered does not match email on your profile'] = 'O endereço de e-mail inserido não corresponde ao e-mail em seu perfil';
+$lang['Search Bank'] = "Pesquisar Banco";
+$lang['financial_account.pixtype'] = 'Tipo Pix';
+$lang['financial_account.CPF_number'] = 'Número do CPF';
+$lang['Deposit successful'] = "Depósito bem sucedido";
+$lang['Cancel deposit'] = "cancelar depósito";
+$lang['Add E-wallet Account'] = "ADICIONAR CONTA E-WALLET";
+$lang['Add Crypto Account'] = "ADICIONAR CONTA CRIPTOGRÁFICA";
+$lang['con.23'] = ' Entre em contato conosco para ativar sua conta proxy:';
+$lang['aff.login.contact.qq'] = 'Telegram';
+$lang['aff.login.contact.skype'] = 'Whstsapp';
+$lang['aff.login.contact.wechat'] = 'Email';
+$lang['aff.login.contact.email'] = 'Facebook';
+$lang['withdrawal.msg8'] = 'Verifique o número de telefone antes de solicitar um saque.';
+?>

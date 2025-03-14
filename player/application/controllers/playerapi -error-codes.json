@@ -1,0 +1,490 @@
+{
+    "code": 20000,
+    "data": [
+        {
+            "code": 20000,
+            "name": "OK",
+            "message": ""
+        },
+        {
+            "code": 20100,
+            "name": "LOCKED",
+            "message": "Data has been locked"
+        },
+        {
+            "code": 20700,
+            "name": "MULTI_STATUS",
+            "message": ""
+        },
+        {
+            "code": 40000,
+            "name": "GENERAL_CLIENT_ERROR",
+            "message": ""
+        },
+        {
+            "code": 40300,
+            "name": "UNAUTHORIZED",
+            "message": "Access denied: no permission."
+        },
+        {
+            "code": 40301,
+            "name": "IP_RESTRICTED",
+            "message": "IP is restricted."
+        },
+        {
+            "code": 40302,
+            "name": "PLAYER_BLOCKED",
+            "message": "Player is blocked."
+        },
+        {
+            "code": 40305,
+            "name": "CANNOT_EDIT_SUPERADMIN",
+            "message": "Cannot edit superadmin."
+        },
+        {
+            "code": 40306,
+            "name": "CANNOT_EDIT_ADMIN_ROLE",
+            "message": "Cannot edit admin role."
+        },
+        {
+            "code": 40307,
+            "name": "CANNOT_DELETE_DEFAULT_GROUP_TAG",
+            "message": "Cannot delete system Default group tag."
+        },
+        {
+            "code": 40308,
+            "name": "OPERATOR_RESTRICTED",
+            "message": "The operator is restricted."
+        },
+        {
+            "code": 40309,
+            "name": "CANNOT_LOCK_REQUEST",
+            "message": "Cannot lock this request"
+        },
+        {
+            "code": 40310,
+            "name": "NOT_ACTIVE_PRIVILEGE",
+            "message": "Not allow to use the site privilege"
+        },
+        {
+            "code": 40311,
+            "name": "CANNOT_EDIT_NOT_REALTIME_CASHBACK_BONUS",
+            "message": "Cannot edit not realtime cashback bonus."
+        },
+        {
+            "code": 40312,
+            "name": "CANNOT_EDIT_AGENT_NOT_WITH_LEVEL_0_OR_1",
+            "message": "Only agents with a level of zero or one can be edited."
+        },
+        {
+            "code": 40313,
+            "name": "CANNOT_CREATE_SUBAGENT",
+            "message": "Cannot create sub agent becuase the player is not a agnet."
+        },
+        {
+            "code": 40314,
+            "name": "CANNOT_CREATE_PLAYER",
+            "message": "Cannot create a new player becuase player is not a agnet."
+        },
+        {
+            "code": 40400,
+            "name": "NOT_FOUND",
+            "message": "The entity you want to operate was not found."
+        },
+        {
+            "code": 40401,
+            "name": "WALLET_NOT_FOUND",
+            "message": "Wallet not found."
+        },
+        {
+            "code": 40402,
+            "name": "PAYMENT_METHOD_NOT_FOUND",
+            "message": "Payment Method not found."
+        },
+        {
+            "code": 40410,
+            "name": "PLAYER_NOT_FOUND",
+            "message": "Player not found."
+        },
+        {
+            "code": 40411,
+            "name": "PLAYER_GROUP_NOT_FOUND",
+            "message": "Player group not found."
+        },
+        {
+            "code": 40412,
+            "name": "PLAYER_TAG_NOT_FOUND",
+            "message": "Player tag not found."
+        },
+        {
+            "code": 40413,
+            "name": "CURRENCY_NOT_AVAILABLE",
+            "message": "The currency is not available in this site."
+        },
+        {
+            "code": 40415,
+            "name": "PLAYER_BANK_ACCOUNT_NOT_FOUND",
+            "message": "Player bank account not found."
+        },
+        {
+            "code": 40417,
+            "name": "PLAYER_MESSAGE_NOT_FOUND",
+            "message": "Player message not found."
+        },
+        {
+            "code": 40418,
+            "name": "PLAYER_ANNOUNCEMENT_NOT_FOUND",
+            "message": "Player announcement not found."
+        },
+        {
+            "code": 40430,
+            "name": "OPERATOR_NOT_FOUND",
+            "message": "Operator not found."
+        },
+        {
+            "code": 40445,
+            "name": "CAMPAIGN_NOT_FOUND",
+            "message": "Campaign not found."
+        },
+        {
+            "code": 40448,
+            "name": "REFERRAL_NOT_FOUND",
+            "message": "Referral not found."
+        },
+        {
+            "code": 40450,
+            "name": "PLAYER_MESSAGE_TEMPLATE_NOT_FOUND",
+            "message": "Player message template not found."
+        },
+        {
+            "code": 40451,
+            "name": "AUTOMATION_JOB_NOT_FOUND",
+            "message": "Automation job not found."
+        },
+        {
+            "code": 40452,
+            "name": "CMS_KEY_NOT_FOUND",
+            "message": "Key not found in CMS."
+        },
+        {
+            "code": 40453,
+            "name": "API_CONFIG_NOT_FOUND",
+            "message": "Api config not found."
+        },
+        {
+            "code": 40454,
+            "name": "DEPOSIT_REQUEST_NOT_FOUND",
+            "message": "Deposit request not found."
+        },
+        {
+            "code": 40455,
+            "name": "WITHDRAW_PASSWORD_NOT_FOUND",
+            "message": "Please setup withdraw password."
+        },
+        {
+            "code": 40456,
+            "name": "FEE_TERM_NOT_FOUND",
+            "message": "Fee term not found in site."
+        },
+        {
+            "code": 40457,
+            "name": "SMP_USER_NOT_FOUND",
+            "message": "T1SMP user was not found"
+        },
+        {
+            "code": 40458,
+            "name": "SERVER_ID_NOT_FOUND",
+            "message": "Server ID was not found"
+        },
+        {
+            "code": 40459,
+            "name": "FILE_NOT_FOUND",
+            "message": "File not found."
+        },
+        {
+            "code": 40460,
+            "name": "T1MERCHANT_NOT_FOUND",
+            "message": "T1 merchant was not found"
+        },
+        {
+            "code": 40061,
+            "name": "WITHDRAW_REQUEST_NOT_FOUND",
+            "message": "Withdraw request not found"
+        },
+        {
+            "code": 40062,
+            "name": "AGENT_NOT_FOUND",
+            "message": "Agent not found"
+        },
+        {
+            "code": 40063,
+            "name": "PARENT_AGENT_NOT_FOUND",
+            "message": "Parent agent not found"
+        },
+        {
+            "code": 46000,
+            "name": "INVALID_PARAMETER",
+            "message": "Invalid parameter"
+        },
+        {
+            "code": 46001,
+            "name": "INVALID_PASSWORD",
+            "message": "The password entered was invalid."
+        },
+        {
+            "code": 46002,
+            "name": "USERNAME_ALREADY_EXISTS",
+            "message": "Username already exists."
+        },
+        {
+            "code": 46003,
+            "name": "INVALID_GROUP_ID",
+            "message": "This is not a group id for player."
+        },
+        {
+            "code": 46004,
+            "name": "INVALID_TAG_ID",
+            "message": "This is not a tag id for player."
+        },
+        {
+            "code": 46005,
+            "name": "INVALID_FILE_TYPE",
+            "message": "Invalid file type."
+        },
+        {
+            "code": 46006,
+            "name": "INVALID_ANSWER",
+            "message": "The answer entered was invalid."
+        },
+        {
+            "code": 46007,
+            "name": "INVALID_OTP",
+            "message": "The OTP entered was incorrect or has expired."
+        },
+        {
+            "code": 46008,
+            "name": "PLAYER_BANK_ACCOUNT_ALREADY_EXISTS",
+            "message": "Bank account already exists for the player."
+        },
+        {
+            "code": 46009,
+            "name": "PLAYER_EMAIL_ALREADY_EXISTS",
+            "message": "Email already exists in another player."
+        },
+        {
+            "code": 46010,
+            "name": "INVALID_CAPTCHA",
+            "message": "Incorrect captcha"
+        },
+        {
+            "code": 46011,
+            "name": "DUPLICATED_PHONE_NUMBER",
+            "message": "Phone number is used by another player"
+        },
+        {
+            "code": 46012,
+            "name": "INVALID_PARENT_AGENT",
+            "message": "The parent agent cannot be one of the child agents to which it belongs."
+        },
+        {
+            "code": 46013,
+            "name": "INVALID_AGENT_LEVEL_WITH_EXCEED_10",
+            "message": "All sub-agent levels cannot exceed 10."
+        },
+        {
+            "code": 46014,
+            "name": "INVALID_PHONE_NUMBER",
+            "message": "Invalid phone number."
+        },
+        {
+            "code": 47000,
+            "name": "INVALID_STATUS",
+            "message": "Changes are not allowed because the execution conditions are not met."
+        },
+        {
+            "code": 47011,
+            "name": "INVALID_CAMPAIGN_STATUS",
+            "message": "Cannot edit campaign because the status does not meet the conditions."
+        },
+        {
+            "code": 47012,
+            "name": "INVALID_API_CONFIG_STATUS",
+            "message": "Cannot edit api config because the status does not meet the conditions."
+        },
+        {
+            "code": 47013,
+            "name": "INVALID_DEPOSIT_REQUEST_STATUS",
+            "message": "Cannot edit deposit request because the status does not meet the conditions."
+        },
+        {
+            "code": 47014,
+            "name": "WALLET_DISABLED",
+            "message": "The wallet is disabled."
+        },
+        {
+            "code": 47015,
+            "name": "FILE_SIZE_EXCEEDS",
+            "message": "The file exceeds its maximum permitted size."
+        },
+        {
+            "code": 47016,
+            "name": "API_UNDER_MAINTENANCE",
+            "message": "The api is under maintenance."
+        },
+        {
+            "code": 47017,
+            "name": "WITHDRAWAL_DISABLED",
+            "message": "Withdrawal has been disabled"
+        },
+        {
+            "code": 47018,
+            "name": "DEPOSIT_DISABLED",
+            "message": "Deposit has been disabled"
+        },
+        {
+            "code": 47019,
+            "name": "GAME_LAUNCH_DISABLED",
+            "message": "Launching game has been disabled"
+        },
+        {
+            "code": 47029,
+            "name": "API_IS_UNAVAILABLE",
+            "message": "API is unavailable"
+        },
+        {
+            "code": 48000,
+            "name": "INVALID_FORMAT",
+            "message": ""
+        },
+        {
+            "code": 48001,
+            "name": "MALFORMED_PARAMETER",
+            "message": "Failure parsing input."
+        },
+        {
+            "code": 49000,
+            "name": "OPERATION_FAILED",
+            "message": "Operation failed."
+        },
+        {
+            "code": 49001,
+            "name": "INSUFFICIENT_BALANCE",
+            "message": "Insufficient balance."
+        },
+        {
+            "code": 49010,
+            "name": "API_OPERATION_FAILED",
+            "message": "Api operation failed."
+        },
+        {
+            "code": 49011,
+            "name": "DEPOSIT_REQUEST_OPERATION_FAILED",
+            "message": "Failed creating deposit request."
+        },
+        {
+            "code": 49012,
+            "name": "WITHDRAW_REQUEST_OPERATION_FAILED",
+            "message": "Failed updating player's balance and/or withdraw request."
+        },
+        {
+            "code": 49013,
+            "name": "PAYMENT_API_CONFIG_OPERATION_FAILED",
+            "message": "Failed to modify payment api config."
+        },
+        {
+            "code": 49014,
+            "name": "PLAYER_MESSAGE_OPERATION_FAILED",
+            "message": "Failed to modify player message."
+        },
+        {
+            "code": 49015,
+            "name": "CLEAN_TOKEN_FAILED",
+            "message": "Failed to clean token."
+        },
+        {
+            "code": 49017,
+            "name": "TRANSFER_ALL_GAME_TO_MAIN_WALLET_FAILED",
+            "message": "Failed to transfer all game balance back to main wallet."
+        },
+        {
+            "code": 49018,
+            "name": "CMS_OPERATION_FAILED",
+            "message": "Failed to edit single store entry by key."
+        },
+        {
+            "code": 49019,
+            "name": "FILE_SAVE_FAILED",
+            "message": "Failed to save file."
+        },
+        {
+            "code": 49020,
+            "name": "WITHDRAW_CONDITION_OPERATION_FAILED",
+            "message": "Failed to edit withdraw condition."
+        },
+        {
+            "code": 49021,
+            "name": "INITIALIZE_NEW_SITE_FAILED",
+            "message": "Failed to create new SBE site"
+        },
+        {
+            "code": 49022,
+            "name": "PLAYER_PHONE_OPERATION_FAILED",
+            "message": "Failed to validate player's phone, should invalidate phone fist."
+        },
+        {
+            "code": 49023,
+            "name": "CREATE_T1MERCHANT_FAILED",
+            "message": "Failed to create T1 merchant."
+        },
+        {
+            "code": 49024,
+            "name": "PLAYER_ALREADY_IS_AGENT",
+            "message": "Failed to convert the player as a agent, becuase the player is already as a agent."
+        },
+        {
+            "code": 50000,
+            "name": "SERVER_ERROR",
+            "message": "Unknown error"
+        },
+        {
+            "code": 50010,
+            "name": "EXTERNAL_API_ERROR",
+            "message": "Failure communicating with external system."
+        },
+        {
+            "code": 50011,
+            "name": "EXTERNAL_PAYMENT_API_ERROR",
+            "message": "Failure communicating with external payment system."
+        },
+        {
+            "code": 50012,
+            "name": "EXTERNAL_GAME_API_ERROR",
+            "message": "Failure communicating with external game provider system."
+        },
+        {
+            "code": 50013,
+            "name": "EXTERNAL_SMS_API_ERROR",
+            "message": "Failure communicating with external sms system."
+        },
+        {
+            "code": 50014,
+            "name": "EXTERNAL_EMAIL_API_ERROR",
+            "message": "Failure communicating with external email system."
+        },
+        {
+            "code": 50015,
+            "name": "EXTERNAL_T1GMERCHANT_API_ERROR",
+            "message": "Failure creating T1-gateway merchant"
+        },
+        {
+            "code": 50016,
+            "name": "EXTERNAL_EXCHANGE_RATE_API_ERROR",
+            "message": "Failure communicating with external exchange rate system."
+        },
+        {
+            "code": 50017,
+            "name": "EXTERNAL_WITHDRAW_API_ERROR",
+            "message": "Failure communicating with external withdraw system."
+        }
+    ]
+}

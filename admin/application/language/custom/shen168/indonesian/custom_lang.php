@@ -1,0 +1,20 @@
+<?php
+$lang["footer.01"] = 'Hubungi Kami';
+$lang['Fund Account'] = 'Akun Dana';
+$lang['lang.games'] = 'Games';
+$lang['License'] = 'Lisensi';
+$lang['wechat'] = 'Wechat ID';
+$lang['player.23'] = 'QQ ID';
+$lang['Live Chat'] = 'Bantuan Operator';
+$lang['Copy Right'] = "Copyright © ";
+$lang['All rights reserved'] = ". Hak Cipta Dilindungi";
+$lang['Cashier Center'] = "Dompet";
+$lang['header.affiliate2'] = "Afiliasi";
+$lang['hxpj.footer_bar.links.common_problems'] = 'FAQ';
+$lang['Hi'] = "Hi,";
+$lang['Instant Message 1']='Skype';
+$lang['Instant Message 2']='Facebook';
+$lang['Instant Message 3']='Telegram';
+$lang['footer.about_us'] = 'about us';
+$lang['footer.privacy_policy'] = 'privacy policy';
+$lang['footer.faq']	= 'FAQ';

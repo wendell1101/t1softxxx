@@ -1,0 +1,21 @@
+<?php
+$lang["Promotion"] = '优惠';
+$lang['footer_terms_and_conditions'] = '条款及条件';
+$lang['lang.games'] = "游戏平台";
+$lang['FAQ'] = "常见问题";
+$lang['player.23'] = "QQ";
+$lang['account_number_can_not_be_duplicate'] = '银行账号已存在';
+$lang['account_number_allow_used'] = '银行账号可使用';
+$lang['lang.bet.plus.result'] = '投注结果';
+$lang['Total Bet Result'] = '总投注结果';
+$lang['con.24'] = "注册成功";
+$lang['Hi'] = "您好,";
+$lang['Wrong captcha'] = '验证码错误';
+$lang['error.captcha'] = '验证码错误';
+$lang['Instant Message 1']='微信';
+$lang['Instant Message 2']='QQ';
+$lang['Instant Message 3']='Skype';
+$lang['footer.about_us'] = '关于我们';
+$lang['footer.privacy_policy'] = '隐私政策';
+$lang['footer.faq']	= '常见问题';
+$lang['footer.contact_us']	= '联络我们';

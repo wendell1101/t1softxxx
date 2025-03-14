@@ -1,0 +1,153 @@
+.peg,
+.wheelSVG {
+    visibility: hidden;
+}
+
+.centerCircle,
+.valueContainer,
+.wheelOutline,
+.wheelText {
+    pointer-events: none;
+}
+
+
+.spin-wheel .main-content button {
+    position: relative;
+    background-color: #9c7a3f;
+}
+
+ .wheelContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0;
+
+}
+
+.wheelSVG {
+   position: relative;
+    overflow: visible;
+    height: 450px;
+}
+
+.wheelText {
+    text-anchor: start;
+    font-family: Montserrat, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.wheelText tspan {
+    text-anchor: middle;
+    letter-spacing: 2px;
+}
+
+.toast {
+    border-radius: 12px;
+    opacity: 0;
+    background-color: #9c7a3f;
+    position: absolute;
+    overflow: hidden;
+    color: #FFF;
+    font-weight: 400;
+    width: auto;
+    padding: 10px 30px;
+}
+
+.toast p {
+    clear: both;
+    margin: 15px;
+    font-size: 20px;
+    color: #ededed;
+    letter-spacing: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    line-height: 32px;
+    -webkit-transition: line-height .2s ease;
+    transition: line-height .2s ease;
+}
+
+.spin-wheel .main-content button {
+    position: relative;
+    max-width: 400px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #ededed;
+    border-radius: 6px;
+    border: none;
+    box-shadow: 0 2px 0 #9c7a3f;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+}
+
+@media only screen and (max-width: 480px) {
+
+    .spin-wheel .main-content button {
+        font-size: 1rem;
+        padding: 10px;
+        width: 60vw;
+    }
+    .toast {
+		padding: 0;
+    }
+    .toast p,
+    .toast span {
+        font-size: 20px;
+        line-height: 1.5rem;
+    }
+}
+
+@media only screen and (min-width: 481px) and (max-width: 800px) {
+
+    .toast {
+		padding: 0;
+    }
+    .toast p,
+    .toast span {
+        font-size: 20px;
+        line-height: 1;
+    }
+}
+
+@media only screen and (min-width: 801px) {
+
+    .toast p,
+    .toast span {
+        font-size: 20px;
+        line-height: 1;
+    }
+}
+
+@media only screen and (max-height: 480px) {
+
+    .toast p,
+    .toast span {
+        font-size: 20px;
+        line-height: 1;
+    }
+
+    .spin-wheel .main-content button {
+        font-size: 22px;
+        padding: 10px;
+        width: 90%;
+    }
+
+
+}
+
+.spin-wheel .main-content button:focus {
+    outline: 0;
+}
+
+.spin-wheel .main-content a:link { color:#F1DC16; }
+.spin-wheel .main-content a:visited { color:#F1DC16; }
+.spin-wheel .main-content a:hover { color:#F1DC16; }
+.spin-wheel .main-content a:active { color:#F1DC16;}

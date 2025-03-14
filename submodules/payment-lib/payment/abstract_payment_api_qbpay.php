@@ -1,0 +1,321 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api.php';
+/**
+ * QBPay
+ *
+ * * QBPAY_ALIPAY_PAYMENT_API, ID: 5071
+ * * QBPAY_ALIPAY_H5_PAYMENT_API, ID: 5072
+ * * QBPAY_WEIXIN_PAYMENT_API, ID: 5166
+ * * QBPAY_WEIXIN_H5_PAYMENT_API, ID: 5167
+ *
+ * Required Fields:
+ * * URL
+ * * Account
+ * * Key
+ *
+ * Field Values:
+ * * URL:
+ * * Account: ## Merchant ID ##
+ * * Key: ## Secret Key ##
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+abstract class Abstract_payment_api_qbpay extends Abstract_payment_api {
+
+    const STYPE_ALIPAY	   = 'AP'; //支付宝
+    const STYPE_ALIPAY_H5  = 'APWAP'; //手机支付宝
+    const STYPE_WEIXIN	   = 'WX'; //微信
+    const STYPE_WEIXIN_H5  = 'WXWAP'; //手机微信
+
+	const RETURN_SUCCESS_CODE = 'ok';
+    const RETURN_FAILED_CODE = 'FAIL';
+    const REQUEST_SUCCESS = '10000';
+	const PAY_RESULT_SUCCESS = '1';
+
+	# Implement these for specific pay type
+	protected abstract function configParams(&$params, $direct_pay_extra_info);
+	protected abstract function processPaymentUrlForm($params);
+
+	public function generatePaymentUrlForm($orderId, $playerId, $amount, $orderDateTime, $playerPromoId = null, $enabledSecondUrl = true, $bankId = null) {
+		if ($this->shouldRedirect($enabledSecondUrl)) {
+			$url = $this->CI->utils->getPaymentUrl($this->getSystemInfo('second_url'), $this->getPlatformCode(), $amount, $playerId, $playerPromoId, false, $bankId, $orderId);
+			$result = array('success' => true, 'type' => self::REDIRECT_TYPE_URL, 'url' => $url);
+			return $result;
+		}
+
+		$order = $this->CI->sale_order->getSaleOrderById($orderId);
+
+		$params['merchantno'] = $this->getSystemInfo("account");
+		$params['customno'] = $order->secure_id;
+		$params['productname'] = 'Deposit';
+		$params['money'] = $this->convertAmountToCurrency($amount); //元
+		$params['timestamp'] = $this->getMillisecond();
+		$params['notifyurl'] = $this->getNotifyUrl($orderId);
+		$params['buyerip'] = $this->getClientIp();
+
+		$this->configParams($params, $order->direct_pay_extra_info);
+		$params['sign'] = $this->sign($params);
+		$this->CI->utils->debug_log("=====================qbpay generatePaymentUrlForm", $params);
+
+		return $this->processPaymentUrlForm($params);
+	}
+
+	protected function getMillisecond() {
+	    list($s1, $s2) = explode(' ', microtime());
+	    return (float)sprintf('%.0f', (floatval($s1) + floatval($s2)) * 1000);
+	}
+
+	# Submit POST form
+	protected function processPaymentUrlFormPost($params) {
+		return array(
+			'success' => true,
+			'type' => self::REDIRECT_TYPE_FORM,
+			'url' => $this->getSystemInfo('url'),
+			'params' => $params,
+			'post' => true,
+		);
+	}
+
+    # Display QRCode get from curl
+    protected function processPaymentUrlFormQRCode($params) {
+    	$url = $this->getSystemInfo('url');
+        $response = $this->submitPostForm($url, $params, false, $params['customno']);
+        $decode_data = json_decode($response,true);
+        $msg = lang('Invalidte API response');
+
+		if(!empty($decode_data['data']['scanurl']) && ($decode_data['resultCode'] == self::REQUEST_SUCCESS)) {
+			return array(
+                'success' => true,
+                'type' => self::REDIRECT_TYPE_URL,
+                'url' => $decode_data['data']['scanurl'],
+            );
+        }else {
+            if(!empty($decode_data['resultMsg'])) {
+                $msg = "[".$decode_data['resultCode'] ."] ".$decode_data['resultMsg'];
+            }
+            return array(
+                'success' => false,
+                'type' => self::REDIRECT_TYPE_ERROR, # will be redirected to a view for error display
+                'message' => $msg
+            );
+        }
+    }
+
+
+	/**
+	 * detail: This will be called when the payment is async, API server calls our callback page,
+	 * When that happens, we perform verifications and necessary database updates to mark the payment as successful
+	 *
+	 * @param int $orderId order id
+	 * @param array $params
+	 * @return array
+	 */
+	public function callbackFromServer($orderId, $params) {
+		$response_result_id = parent::callbackFromServer($orderId, $params);
+		return $this->callbackFrom('server', $orderId, $params, $response_result_id);
+	}
+
+	/**
+	 * detail: This will be called when user redirects back to our page from payment API
+	 *
+	 * @param int $orderId order id
+	 * @param array $params
+	 * @return array
+	 */
+	public function callbackFromBrowser($orderId, $params) {
+		$response_result_id = parent::callbackFromBrowser($orderId, $params);
+		return $this->callbackFrom('browser', $orderId, $params, $response_result_id);
+	}
+
+	# $source can be 'server' or 'browser'
+	private function callbackFrom($source, $orderId, $params, $response_result_id) {
+		if(empty($params) || is_null($params)){
+			$raw_post_data = file_get_contents('php://input', 'r');
+        	$params = json_decode($raw_post_data, true);
+		}
+        $this->CI->utils->debug_log('=======================qbpay callbackFrom in Function callbackFrom', $params);
+
+        $result = array('success' => false, 'next_url' => null, 'message' => lang('error.payment.failed'));
+        $order = $this->CI->sale_order->getSaleOrderById($orderId);
+        $processed = false;
+
+        if($source == 'server'){
+            $this->CI->utils->debug_log('=======================qbpay callbackFromServer server callbackFrom', $params);
+            if (!$order || !$this->checkCallbackOrder($order, $params, $processed)) {
+                return $result;
+            }
+        }
+
+		# Update order payment status and balance
+		$success=true;
+
+		# Update player balance based on order status
+		# if it's STATUS_SETTLED or STATUS_BROWSER_CALLBACK, put log, and ignore
+		$orderStatus = $this->CI->sale_order->getSaleOrderStatusById($orderId);
+		if ($orderStatus == Sale_order::STATUS_BROWSER_CALLBACK || $orderStatus == Sale_order::STATUS_SETTLED) {
+			$this->CI->utils->debug_log('callbackFrom' . ucfirst($source) . ', already get callback for order:' . $order->id, $params);
+			if ($source == 'server' && $order->status == Sale_order::STATUS_BROWSER_CALLBACK) {
+				$this->CI->sale_order->setStatusToSettled($orderId);
+			}
+		} else {
+			# update player balance
+            $this->CI->sale_order->updateExternalInfo($order->id, $params['orderno'], null, null, null, $response_result_id);
+			if ($source == 'browser') {
+				$success = $this->CI->sale_order->browserCallbackSaleOrder($order->id, 'auto broswer callback ' . $this->getPlatformCode(), false);
+			} elseif ($source == 'server') {
+				$this->approveSaleOrder($order->id, 'auto server callback ' . $this->getPlatformCode(), false);
+			}
+		}
+
+		$result['success'] = $success;
+		if ($success) {
+			$result['message'] = self::RETURN_SUCCESS_CODE;
+		} else {
+			$result['message'] = $processed ? self::RETURN_SUCCESS_CODE : self::RETURN_FAILED_CODE;
+		}
+
+		if ($source == 'browser') {
+			$result['next_url'] = $this->getPlayerBackUrl();
+			$result['go_success_page'] = true;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * detail: Validates whether the callback from API contains valid info and matches with the order
+	 *
+	 * @return boolean
+	 */
+
+	private function checkCallbackOrder($order, $fields, &$processed = false) {
+
+		$requiredFields = array('orderno', 'merchantno','customno','type','bankcode','tjmoney','money','status','sign');
+
+		foreach ($requiredFields as $f) {
+			if (!array_key_exists($f, $fields)) {
+				$this->writePaymentErrorLog("=====================qbpay missing parameter: [$f]", $fields);
+				return false;
+			}
+		}
+
+		if ($fields['status'] != self::PAY_RESULT_SUCCESS) {
+			$payStatus = $fields['status'];
+			$this->writePaymentErrorLog("=====================qbpay Payment was not successful, payStatus is [$payStatus]", $fields);
+			return false;
+		}
+
+		if ( $this->convertAmountToCurrency($order->amount) != floatval( $fields['tjmoney'] )
+		) {
+			$this->writePaymentErrorLog("=====================qbpay Payment amounts do not match, expected [$order->amount]", $fields);
+			return false;
+		}
+
+        if ($fields['customno'] != $order->secure_id) {
+            $this->writePaymentErrorLog("========================qbpay checkCallbackOrder order IDs do not match, expected [$order->secure_id]", $fields);
+            return false;
+        }
+
+        # is signature authentic?
+        if (!$this->verifySignature($fields)) {
+            $this->writePaymentErrorLog('=======================qbpay checkCallbackOrder verify signature Error', $fields);
+            return false;
+        }
+
+		$processed = true; # processed is set to true once the signature verification pass
+
+		# everything checked ok
+		return true;
+	}
+
+	public function directPay($order = null) {
+		return array('success' => false); # direct pay not supported by this API
+	}
+
+	public function getBankListInfoFallback() {
+		return array(
+            array('label' => '工商银行', 'value' => '1102'),
+            array('label' => '农业银行', 'value' => '1103'),
+            array('label' => '建设银行', 'value' => '1105'),
+            array('label' => '交通银行', 'value' => '1301'),
+            array('label' => '光大银行', 'value' => '1311'),
+            array('label' => '华夏银行', 'value' => '1304'),
+            array('label' => '民生银行', 'value' => '1305'),
+            array('label' => '广发银行', 'value' => '1460'),
+            array('label' => '招商银行', 'value' => '1308'),
+            array('label' => '北京银行', 'value' => '1313'),
+            array('label' => '上海银行', 'value' => '1310'),
+            array('label' => '邮政储蓄银行', 'value' => '1312'),
+		);
+	}
+
+	# -- Private functions --
+	/**
+	 * detail: After payment is complete, the gateway will invoke this URL asynchronously
+	 *
+	 * @param int $orderId
+	 * @return void
+	 */
+	private function getNotifyUrl($orderId) {
+		return parent::getCallbackUrl('/callback/process/' . $this->getPlatformCode() . '/' . $orderId);
+	}
+
+	/**
+	 * detail: After payment is complete, the gateway will send redirect back to this URL
+	 *
+	 * @param int $orderId
+	 * @return void
+	 */
+	private function getReturnUrl($orderId) {
+		return parent::getCallbackUrl('/callback/browser/success/' . $this->getPlatformCode() . '/' . $orderId);
+	}
+
+	/**
+	 * detail: Format the amount value for the API
+	 *
+	 * @param float $amount
+	 * @return float
+	 */
+	protected function convertAmountToCurrency($amount) {
+		return number_format($amount, 2, '.', '');
+	}
+
+	# -- private helper functions --
+
+	/**
+	 * detail: getting the signature
+	 *
+	 * @param array $data
+	 * @return	string
+	 */
+	public function sign($params) {
+		$params_keys = array('merchantno','customno','stype','notifyurl','money','timestamp','buyerip');
+		$signStr =  $this->createSignStr($params_keys,$params);
+        $sign = md5($signStr);
+
+		return $sign;
+	}
+
+    public function verifySignature($data) {
+	    $callback_sign = $data['sign'];
+	    $data_keys = array('merchantno','orderno','customno','type','tjmoney','money','status');
+        $signStr =  $this->createSignStr($data_keys,$data);
+        $sign = md5($signStr);
+
+        return (strcasecmp($sign, $callback_sign) !== 0)?false:true;
+    }
+
+    private function createSignStr($params,$vals) {
+       	$signStr='';
+		foreach ($params as $value) {
+
+			if(is_null($value)){
+				continue;
+			}
+			$signStr .= $vals[$value]."|";
+		}
+		$signStr .= $this->getSystemInfo('key');
+		return $signStr;
+	}
+}

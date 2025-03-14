@@ -1,0 +1,46 @@
+table tr.row-selected {
+  background: #f8f8f8;
+}
+#message-btn-sets button {
+  margin-right: 5px;
+}
+
+#select-all-tip{
+  display: none;
+  background: #F5F5F5;
+  border: 1px solid #DEDEDE;
+  border-radius: 5px;
+  font-size: 13px;
+  padding: 3px 10px;
+  margin-left: 10px;
+  margin-top: 4px;
+}
+#select-all-tip a{
+  color: #2B82E8;
+  text-decoration: underline;
+  margin-left: 20px;
+}
+#select-all-tip a:hover {
+  color: #3F61B4;
+  cursor: pointer;
+}
+
+.select-users{
+  white-space: nowrap;
+}
+.select-users a{
+  text-decoration: none;
+  color: #707070;
+}
+.select-users .dropdown-menu{
+  background: #FFF;
+  box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.5);
+  border: 1px solid #DDD;
+}
+.select-users .dropdown-menu>li a{
+  padding: 5px 10px;
+}
+.select-users .dropdown-menu>li a:hover{
+  background: #5697D1;
+  color: #fff;
+}

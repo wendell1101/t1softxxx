@@ -1,0 +1,153 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api_paymerocrypto.php';
+/**
+ * PAYMEROCRYPTO USDT 2
+ *
+ * * PAYMEROCRYPTO_USDT_2_PAYMENT_API, ID: 5877
+ * *
+ * Required Fields:
+ * * URL
+ *
+ * Field Values:
+ * * URL: https://service-api.paymero.io/v1/crypto/
+
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+class Payment_api_paymerocrypto_usdt_2 extends Abstract_payment_api_paymerocrypto {
+
+    public function getPlatformCode() {
+        return PAYMEROCRYPTO_USDT_2_PAYMENT_API;
+    }
+
+    public function getPrefix() {
+        return 'paymerocrypto_usdt_2';
+    }
+
+    protected function getCoin() {
+        return $this->getSystemInfo('currency', self::COIN_USDT);
+    }
+
+    public function generatePaymentUrlForm($orderId, $playerId, $amount, $orderDateTime, $playerPromoId = null, $enabledSecondUrl = true, $bankId = null) {
+        if ($this->shouldRedirect($enabledSecondUrl)) {
+            $url = $this->CI->utils->getPaymentUrl($this->getSystemInfo('second_url'), $this->getPlatformCode(), $amount, $playerId, $playerPromoId, false, $bankId, $orderId);
+            $result = array('success' => true, 'type' => self::REDIRECT_TYPE_URL, 'url' => $url);
+            return $result;
+        }
+
+        // $this->_custom_curl_header = array('Content-Type: application/json');
+        $order     = $this->CI->sale_order->getSaleOrderById($orderId);
+        $secure_id = $order->secure_id;
+        $currency  = $this->getCoin();
+        $targetCurrency = $this->targetCurrency;
+
+        #get rate
+        $rate = 0;
+        $crypto = 0;
+        $external_order_id = null;
+        $cryptoRate = $this->getCryptoRate();
+        $cryptoRate = json_decode($cryptoRate);
+
+        if (isset($cryptoRate->status)) {
+            if ($cryptoRate->status == self::RETURN_SUCCESS_CODE) {
+                $exchangeRate = $cryptoRate->data->exchangeRate;
+                $rate = $cryptoRate->data->reverseRate;
+
+                $this->utils->debug_log('=====================get cryptoRate usdt success rate', $exchangeRate,$rate);
+            } else {
+                $this->utils->debug_log('=====================get cryptoRate usdt fail');
+            }
+        }else{
+            $this->utils->debug_log('=====================not get cryptoRate usdt');
+        }
+
+        #----Create Address----
+            #https://service-api.paymero.io/v1/crypto/deposit/receiving-address
+            $create_address_url = $this->getSystemInfo('url').$this->paymeny_type.'/receiving-address';
+
+            $params = array();
+            $params['currency']       = $currency;
+            // $params['targetCurrency'] = $targetCurrency;
+            $params['cashierCurrency']= $targetCurrency;
+            if (!empty($this->getSystemInfo('mainCurrency'))) {
+                $params['mainCurrency'] = $this->getSystemInfo('mainCurrency');
+            }
+            $params['externalId']     = $secure_id;
+            $params['notifyUrl']      = $this->getNotifyUrl($orderId);
+            $this->CI->utils->debug_log('=====================paymerocrypto usdt generatePaymentUrlForm params', $params);
+
+            $response = $this->submitPostForm($create_address_url, $params, true, $secure_id);
+            $response = json_decode($response, true);
+            $this->CI->utils->debug_log('=====================paymerocrypto usdt response', $response);
+
+            if($response){
+
+                if($response['status'] == self::RETURN_SUCCESS_CODE){
+                    $address = $response['data']['address'];
+                    $external_order_id = $response['data']['id'];
+                    $crypto = number_format($amount/$exchangeRate, 8, '.', '');
+                    $deposit_notes = 'Wallet address: '.$address.' | '. $currency  .' Real Rate: '.$rate . '|' . 'Bitcoin: ' . $crypto;
+
+                    $this->utils->debug_log('=====================paymerocrypto usdt deposit_notes', $deposit_notes);
+                    $this->CI->sale_order->updateExternalInfo($order->id, $address, '', $crypto);
+                    $this->CI->sale_order->appendNotes($order->id, $deposit_notes);
+
+                    $handle['address'] = $address;
+                    $handle['crypto'] = $crypto;
+                    $handle['current_rate'] = $rate;
+                    $handle['qrcode'] = '<img src="' . QRCODEPATH . urlencode($address). '" width="200" />';
+                }
+                else{
+                    return array(
+                        'success' => false,
+                        'type' => self::REDIRECT_TYPE_ERROR,
+                        'message' => lang('paymerocrypto Create Address Failed').': ['.$response['status'].']'.$response['message']
+                    );
+                }
+            }
+            else{
+                return array(
+                    'success' => false,
+                    'type' => self::REDIRECT_TYPE_ERROR, # will be redirected to a view for error display
+                    'message' => lang('Connect paymerocrypto-express failed')
+                );
+            }
+
+        return $this->handlePaymentFormResponse($handle);
+    }
+
+    protected function handlePaymentFormResponse($handle) {
+        $success = true;
+        $data = array();
+        $data['Sent to Address'] = $handle['address'];
+        $data['Tether']          = $handle['crypto'];
+        $data['Rate']            = $handle['current_rate'];
+        $data['Address qrcode']  = $handle['qrcode'];
+        $this->CI->utils->debug_log("=====================paymerocrypto usdt handlePaymentFormResponse params", $data);
+
+        $collection_text_transfer = '';
+        $collection_text = $this->getSystemInfo("collection_text_transfer", array(''));
+        if(is_array($collection_text)){
+            $collection_text_transfer = $collection_text;
+        }
+        $is_not_display_recharge_instructions = $this->getSystemInfo('is_not_display_recharge_instructions');
+
+        return array(
+            'success' => $success,
+            'type' => self::REDIRECT_TYPE_STATIC,
+            'data' => $data,
+            'collection_text_transfer' => $collection_text_transfer,
+            'is_not_display_recharge_instructions' => $is_not_display_recharge_instructions
+        );
+    }
+
+    # -- Private functions --
+    private function getNotifyUrl($orderId) {
+        return parent::getCallbackUrl('/callback/process/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+
+    private function getReturnUrl($orderId) {
+        return parent::getCallbackUrl('/callback/browser/success/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+}

@@ -1,0 +1,605 @@
+stages:
+  - build
+  # - test
+  # - prepare
+  - staging
+  - production
+  - og_sync
+  - shadow
+  - restart_queue
+  - auto_testing
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+  GOOGLE_ACCOUNT: "sbecloudflare1@gmail.com"
+  GOOGLE_PROJECT_NAME: "externalgateway-167009"
+  GOOGLE_LIVE_K8S_NAME: "t1tog"
+  GOOGLE_STAGING_K8S_NAME: "t1togstaging"
+  GOOGLE_T1TUK_K8S_NAME: "t1toguk"
+  GOOGLE_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_STAGING_K8S_ZONE: "asia-east1-b"
+  GOOGLE_T1TUK_K8S_ZONE: "europe-west2-a"
+
+  GOOGLE_KGVIPEN_PROJECT_NAME: "ibetg-164502"
+  GOOGLE_KGVIPEN_LIVE_K8S_NAME: "kgvipen"
+  GOOGLE_KGVIPEN_STAGING_K8S_NAME: "kgvipenstaging"
+  GOOGLE_KGVIPEN_LIVE_K8S_ZONE: "europe-west2-c"
+  GOOGLE_KGVIPEN_STAGING_K8S_ZONE: "europe-west2-b"
+
+  GOOGLE_KGVIPCN_PROJECT_NAME: "ibetg-164502"
+  GOOGLE_KGVIPCN_LIVE_K8S_NAME: "kgvip"
+  GOOGLE_KGVIPCN_STAGING_K8S_NAME: "kgvipstaging"
+  GOOGLE_KGVIPCN_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_KGVIPCN_STAGING_K8S_ZONE: "asia-east1-a"
+
+  GOOGLE_ACCOUNT_SHEN168: "shen168k8s@gmail.com"
+  GOOGLE_SHEN168_PROJECT_NAME: "shen168-202505"
+  GOOGLE_SHEN168_LIVE_K8S_NAME: "shen168-1"
+  GOOGLE_SHEN168_STAGING_K8S_NAME: "shen168staging"
+  GOOGLE_SHEN168_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_SHEN168_STAGING_K8S_ZONE: "asia-east1-a"
+
+  GOOGLE_ACCOUNT_LABA360: "laba360k8s@gmail.com"
+  GOOGLE_LABA360_PROJECT_NAME: "cedar-lexicon-210408"
+  GOOGLE_LABA360_LIVE_K8S_NAME: "laba360"
+  GOOGLE_LABA360_STAGING_K8S_NAME: "laba360"
+  GOOGLE_LABA360_LIVE_K8S_ZONE: "asia-east1-a"
+  GOOGLE_LABA360_STAGING_K8S_ZONE: "asia-east1-a"
+
+  GOOGLE_WINROXY_PROJECT_NAME: "winroxy"
+  GOOGLE_WINROXY_LIVE_K8S_NAME: "winroxy"
+  GOOGLE_WINROXY_STAGING_K8S_NAME: "winroxy"
+  GOOGLE_WINROXY_LIVE_K8S_ZONE: "europe-west2-c"
+  GOOGLE_WINROXY_STAGING_K8S_ZONE: "europe-west2-c"
+
+# before_script:
+#   - git submodule sync --recursive
+#   - git submodule init
+#   - git submodule foreach git pull origin master
+
+build_system:
+  stage: build
+  script:
+    - ./create_links.sh
+    - admin/shell/check_php_syntax.sh
+    - bash run_cli.sh validate_php_opening_tag
+    - ./check_json_format.sh
+
+auto_testing:
+  stage: auto_testing
+  image: cimg/base:2021.04
+#  before_script:
+    # Installing Postman CLI
+#    - curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+  script:
+    # Login using your Postman API keys
+    - postman login --with-api-key PMAK-665fd5c8e7580400016b1a70-0118d68b87ee78af5c3fd008dbb292bce4
+    - postman collection run 31167141-3536a9f7-e638-4a3d-8aca-78690fcc114c -e 31167141-493c3c2d-a486-4c6f-aa6f-0072922774ea
+  when: manual
+
+.job_template: &job_deploy_staging
+  stage: staging
+  script:
+    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_STAGING_K8S_NAME"
+    # generate image in live
+    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_STAGING_K8S_NAME"
+    # do action in staging
+    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_STAGING_K8S_NAME -z $GOOGLE_STAGING_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+  when: manual
+
+.job_prod_template: &job_deploy_prod
+  stage: production
+  script:
+    - bash check_deploy_permission.sh
+    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_LIVE_K8S_NAME"
+    # generate image in live
+    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_LIVE_K8S_NAME"
+    # do action in live
+    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+  when: manual
+
+.job_og_sync_template: &job_deploy_og_sync
+  stage: og_sync
+  script:
+    - pwd
+    - echo deploy $CLIENT_NAME og_sync to $APISYNC_SERVER
+    - bash check_deploy_permission.sh
+    - bash deploy_og_sync.sh
+  when: manual
+
+.job_restart_queue_template: &job_restart_queue
+  stage: restart_queue
+  script:
+    - echo restart $CLIENT_NAME queue on $APISYNC_SERVER
+    - bash restart_queue.sh
+  when: manual
+
+.job_shadow_template: &job_deploy_shadow
+  stage: shadow
+  script:
+    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_LIVE_K8S_NAME"
+    # generate image in live
+    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_LIVE_K8S_NAME"
+    # do action in live
+    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+  when: manual
+
+
+.job_copy_staging_brand_file_template: &job_deploy_copy_staging_brand_file
+  stage: build
+  script:
+    - bash copy_files_to_staging_pod.sh
+  when: manual
+
+
+# .job_template: &job_deploy_ukdemo
+#   stage: ukdemo
+#   script:
+#     - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_T1TUK_K8S_NAME"
+#     # generate image in live
+#     - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#     - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_T1TUK_K8S_NAME"
+#     # do action in staging
+#     - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_T1TUK_K8S_NAME -z $GOOGLE_T1TUK_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#   when: manual
+
+# .job_staging_config_template: &deploy_k8s_staging_config
+#   stage: "staging og_config"
+#   script:
+#     - bash run_cli.sh deploy_config -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_STAGING_K8S_NAME -z $GOOGLE_STAGING_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#   when: manual
+
+# .job_config_template: &deploy_k8s_og_config
+#   stage: "prod og_config"
+#   script:
+#     - bash check_deploy_permission.sh
+#     - bash run_cli.sh deploy_config -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#   when: manual
+
+build-baseimage:
+  stage: build
+  script:
+    - bash run_cli.sh build_base_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_PROJECT_NAME -k $GOOGLE_LIVE_K8S_NAME -z $GOOGLE_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+  when: manual
+
+# -----------caishen888---------------------
+S021-fengsheng-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "caishen888staging"
+
+S021-fengsheng:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "caishen888"
+
+S021-fengsheng-shadow:
+  <<: *job_deploy_shadow
+  variables:
+    CLIENT_NAME: "caishen888-shadow"
+
+C021-fengsheng_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "caishen888staging"
+  <<: *job_deploy_copy_staging_brand_file
+
+
+# -----------gamegateway---------------------
+gamegateway-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "gamegatewaystaging"
+
+gamegateway:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "gamegateway"
+
+gamegateway-og_sync:
+  <<: *job_deploy_og_sync
+  variables:
+    CLIENT_NAME: "gamegateway"
+    APISYNC_SERVER: "t1tapisync2"
+
+gamegateway-restart_queue:
+  <<: *job_restart_queue
+  variables:
+    CLIENT_NAME: "gamegateway"
+    APISYNC_SERVER: "t1tapisync2"
+
+gamegateway-shadow:
+  <<: *job_deploy_shadow
+  variables:
+    CLIENT_NAME: "gamegateway-shadow"
+
+gamegateway_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "gamegatewaystaging"
+  <<: *job_deploy_copy_staging_brand_file
+
+
+# -----------onestop---------------------
+onestop-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "onestopstaging"
+
+onestop:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "onestop"
+
+onestop_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "onestopstaging"
+  <<: *job_deploy_copy_staging_brand_file
+
+onestop-restart_queue:
+  <<: *job_restart_queue
+  variables:
+    CLIENT_NAME: "onestop"
+    APISYNC_SERVER: "t1tapisyncstaging"
+
+onestop-og_sync:
+  <<: *job_deploy_og_sync
+  variables:
+    CLIENT_NAME: "onestop"
+    APISYNC_SERVER: "t1tapisyncstaging"
+
+# -----------demo1---------------------
+demo1:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "demo1"
+
+demo1_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "demo1"
+  <<: *job_deploy_copy_staging_brand_file
+
+# -----------demo2---------------------
+demo2:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "demo2"
+
+demo2_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "demo2"
+  <<: *job_deploy_copy_staging_brand_file
+
+
+# -----------demo3---------------------
+demo3:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "demo3"
+
+demo3_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "demo3"
+  <<: *job_deploy_copy_staging_brand_file
+
+
+# -----------ole777---------------------
+ole777-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "ole777staging"
+
+ole777:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "ole777"
+
+ole777_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "ole777staging"
+  <<: *job_deploy_copy_staging_brand_file
+
+# -----------ole777idn---------------------
+C025-ole777idn-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "ole777idnstaging"
+
+C025-ole777idn:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "ole777idn"
+
+C025-ole777idn-og_sync:
+  <<: *job_deploy_og_sync
+  variables:
+    CLIENT_NAME: "ole777idn"
+    APISYNC_SERVER: "t1tapisync2"
+    
+ole777idn-restart_queue:
+  <<: *job_restart_queue
+  variables:
+    CLIENT_NAME: "ole777idn"
+    APISYNC_SERVER: "t1tapisync2"
+
+C025-ole777idn-live-bak:
+  <<: *job_deploy_shadow
+  variables:
+    CLIENT_NAME: "ole777idn-live-bak"
+
+C025-ole777idn_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "ole777idnstaging"
+  <<: *job_deploy_copy_staging_brand_file
+
+C025-ole777idn-live-bak_copy_file:
+  variables:
+    K8S_NAME: 't1tog'
+    CLIENT_NAME: "ole777idn-live-bak"
+  <<: *job_deploy_copy_staging_brand_file
+
+
+# -----------ole777thb---------------------
+C024-ole777thb-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "ole777thbstaging"
+
+C024-ole777thb:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "ole777thb"
+
+C024-ole777thb-og_sync:
+  <<: *job_deploy_og_sync
+  variables:
+    CLIENT_NAME: "ole777thb"
+    APISYNC_SERVER: "t1tapisync2"
+
+ole777thb-restart_queue:
+  <<: *job_restart_queue
+  variables:
+    CLIENT_NAME: "ole777thb"
+    APISYNC_SERVER: "t1tapisync2"
+
+C024-ole777thb-shadow:
+  <<: *job_deploy_shadow
+  variables:
+    CLIENT_NAME: "ole777thb-shadow"
+
+C024-ole777thb-live-bak:
+  <<: *job_deploy_shadow
+  variables:
+    CLIENT_NAME: "ole777thb-live-bak"
+
+C024-ole777thb_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "ole777thbstaging"
+  <<: *job_deploy_copy_staging_brand_file
+
+C024-ole777thb-live-bak_copy_file:
+  variables:
+    K8S_NAME: 't1tog'
+    CLIENT_NAME: "ole777thb-live-bak"
+  <<: *job_deploy_copy_staging_brand_file
+
+
+
+# -----------clienttemplate------------------
+clienttemplate-staging:
+  <<: *job_deploy_staging
+  variables:
+    CLIENT_NAME: "clienttemplatestaging"
+
+clienttemplate:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "clienttemplate"
+
+clienttemplate_copy_staging_file:
+  variables:
+    K8S_NAME: 't1togstaging'
+    CLIENT_NAME: "clienttemplatestaging"
+  <<: *job_deploy_copy_staging_brand_file
+
+# -----------guide------------------
+guide:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "guide"
+
+# -----------itdesk------------------
+itdesk:
+  <<: *job_deploy_prod
+  variables:
+    CLIENT_NAME: "tailai"
+
+# -----------for kgvipen config ----------------------
+
+#C011-kinggaming-staging:
+#  variables:
+#    CLIENT_NAME: "kgvipenstaging"
+#  stage: staging
+#  script:
+#    # - bash check_deploy_permission.sh
+#    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_KGVIPCN_STAGING_K8S_NAME"
+#    # generate image in live
+#    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_KGVIPCN_STAGING_K8S_NAME"
+#    # do action in staging
+#    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_STAGING_K8S_NAME -z $GOOGLE_KGVIPEN_STAGING_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#  when: manual
+
+#C011-kinggaming:
+#  variables:
+#    CLIENT_NAME: "kgvipen"
+#  stage: production
+#  script:
+#    - bash check_deploy_permission.sh
+#    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_KGVIPEN_LIVE_K8S_NAME"
+#    # generate image in live
+#    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_KGVIPCN_STAGING_K8S_NAME"
+#    # do action in staging
+#    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#  when: manual
+
+#C011-kinggaming-shadow:
+#  variables:
+#    CLIENT_NAME: "kgvipen-shadow"
+#  stage: shadow
+#  script:
+#    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_KGVIPEN_LIVE_K8S_NAME"
+#    # generate image in live
+#    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_KGVIPCN_STAGING_K8S_NAME"
+    # do action in staging
+    #    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+    #    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+    #  when: manual
+
+#C011-kinggaming-live-bak:
+#  variables:
+#    CLIENT_NAME: "kgvipen-live-bak"
+#  stage: shadow
+#  script:
+#    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_KGVIPEN_LIVE_K8S_NAME"
+#    # generate image in live
+#    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_KGVIPCN_STAGING_K8S_NAME"
+#    # do action in staging
+#    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_KGVIPEN_PROJECT_NAME -k $GOOGLE_KGVIPEN_LIVE_K8S_NAME -z $GOOGLE_KGVIPEN_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - bash mattermost_after.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#  when: manual
+
+#C011-kinggaming-og_sync:
+#  variables:
+#    CLIENT_NAME: ""
+#    APISYNC_SERVER: "kgvipenproxy"
+#  stage: og_sync
+#  script:
+#    - pwd
+#    - echo deploy kinggaming og_sync to $APISYNC_SERVER
+#    - bash check_deploy_permission.sh
+#    - bash deploy_og_sync.sh
+#  when: manual
+
+#C011-kinggaming_copy_staging_file:
+#  variables:
+#    K8S_NAME: 'kgvipenstaging'
+#    CLIENT_NAME: "kgvipenstaging"
+#  <<: *job_deploy_copy_staging_brand_file
+
+#C011-kinggaming-live-bak_copy_file:
+#  variables:
+#    K8S_NAME: 'kgvipen'
+#    CLIENT_NAME: "kgvipen-live-bak"
+#  <<: *job_deploy_copy_staging_brand_file
+
+# -----------for idngame config---------------------
+
+# idngame-staging:
+#   variables:
+#     CLIENT_NAME: "idngamestaging"
+#   stage: staging
+#   script:
+#     # - bash check_deploy_permission.sh
+#     - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_SHEN168_STAGING_K8S_NAME"
+#     # generate image in live
+#     - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT_SHEN168 -p $GOOGLE_SHEN168_PROJECT_NAME -k $GOOGLE_SHEN168_LIVE_K8S_NAME -z $GOOGLE_SHEN168_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#     - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_SHEN168_STAGING_K8S_NAME"
+#     # do action in staging
+#     - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT_SHEN168 -p $GOOGLE_SHEN168_PROJECT_NAME -k $GOOGLE_SHEN168_STAGING_K8S_NAME -z $GOOGLE_SHEN168_STAGING_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#   when: manual
+
+# idngame:
+#   variables:
+#     CLIENT_NAME: "idngame"
+#   stage: production
+#   script:
+#     - bash check_deploy_permission.sh
+#     - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_SHEN168_LIVE_K8S_NAME"
+#     # generate image in live
+#     - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT_SHEN168 -p $GOOGLE_SHEN168_PROJECT_NAME -k $GOOGLE_SHEN168_LIVE_K8S_NAME -z $GOOGLE_SHEN168_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#     - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_KGVIPCN_STAGING_K8S_NAME"
+#     # do action in staging
+#     - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT_SHEN168 -p $GOOGLE_SHEN168_PROJECT_NAME -k $GOOGLE_SHEN168_LIVE_K8S_NAME -z $GOOGLE_SHEN168_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#   when: manual
+
+# idngame-og_sync:
+#   variables:
+#     CLIENT_NAME: "idngame"
+#     APISYNC_SERVER: "shen168apisync"
+#   stage: og_sync
+#   script:
+#     - pwd
+#     - echo deploy $CLIENT_NAME og_sync to $APISYNC_SERVER
+#     - bash deploy_og_sync.sh
+#   when: manual
+
+# -----------for winroxy config ----------------------
+
+#winroxy-staging:
+#  variables:
+#    CLIENT_NAME: "winroxystaging"
+#  stage: staging
+#  script:
+#    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_WINROXY_STAGING_K8S_NAME"
+    # generate image in live
+#    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_WINROXY_PROJECT_NAME -k $GOOGLE_WINROXY_LIVE_K8S_NAME -z $GOOGLE_WINROXY_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_WINROXY_STAGING_K8S_NAME"
+    # do action in staging
+#    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_WINROXY_PROJECT_NAME -k $GOOGLE_WINROXY_STAGING_K8S_NAME -z $GOOGLE_WINROXY_STAGING_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#  when: manual
+
+#winroxy:
+#  variables:
+#    CLIENT_NAME: "winroxy"
+#  stage: production
+#  script:
+#    - bash check_deploy_permission.sh
+#    - bash mattermost.sh $GITLAB_USER_LOGIN $CLIENT_NAME $CI_COMMIT_REF_NAME $CI_JOB_ID $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL generate image in $GOOGLE_WINROXY_LIVE_K8S_NAME"
+    # generate image in live
+#    - bash run_cli.sh generate_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_WINROXY_PROJECT_NAME -k $GOOGLE_WINROXY_LIVE_K8S_NAME -z $GOOGLE_WINROXY_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#    - echo "$GITLAB_USER_EMAIL deploy image in $GOOGLE_WINROXY_STAGING_K8S_NAME"
+    # do action in staging
+#    - bash run_cli.sh deploy_image -D -c $CLIENT_NAME -a $GOOGLE_ACCOUNT -p $GOOGLE_WINROXY_PROJECT_NAME -k $GOOGLE_WINROXY_LIVE_K8S_NAME -z $GOOGLE_WINROXY_LIVE_K8S_ZONE -b $CI_COMMIT_REF_NAME -s $CI_COMMIT_SHA
+#  when: manual
+
+#winroxy-og_sync:
+#  variables:
+#    CLIENT_NAME: ""
+#    APISYNC_SERVER: "winroxyapisync"
+#  stage: og_sync
+#  script:
+#    - pwd
+#    - echo deploy winroxy og_sync to $APISYNC_SERVER
+#    - bash check_deploy_permission.sh
+#    - bash deploy_og_sync.sh
+#  when: manual
+

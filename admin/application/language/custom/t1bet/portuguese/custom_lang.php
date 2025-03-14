@@ -1,0 +1,23 @@
+<?php
+$lang['financial_account.CPF_number'] = 'Número do CPF';
+$lang['Search Bank'] = "Procurar banco";
+$lang["New Password"] = 'Nova Sehna:';
+$lang['Email is not verified!'] = 'E-mail não verificado!';
+$lang['Deposit successful'] = "Depósito realizado com sucesso";
+$lang['Cancel deposit'] = "Cancelar depósito";
+$lang['lang.logIn'] = "Entrar";
+$lang['lang.aregister'] = "Cadastre-se";
+$lang['lang.menu'] = "Menu";
+$lang['lang.details'] = "Ver detalhes";
+$lang['Users'] = "Jogador";
+$lang['con.23'] = "Obrigado por se juntar ao programa de afiliados da T1Bet, nossa equipe aprovará seu pedido em breve.";
+$lang['aff.login.contact.wechat'] = "Contact what's app";
+$lang['aff.login.contact.email'] = "No envie um e-mail";
+$lang['Slots'] = "Caça-níqueis";
+$lang['CPF number has been used'] = "Identificamos que esse CPF já foi utilizado. <br>Verifique se o CPF foi digitado corretamente ou entre em contato com o nosso SAC.";
+$lang['cms.mobile.promoReqAppList'] = "Reivindicar promoção";
+$lang['Promotions'] = 'Reivindicar promoção';
+$lang['Refer a Friend'] = "Indique e Ganhe";
+$lang['Refer a friend'] = "Indique um amigo";
+$lang['cashier.withdrawal.withdraw_condition.info'] = '';
+$lang['Please contact administrator to update your CPF Number'] = 'Por gentileza, entre em contato com o serviço de atendimento ao cliente para atualizar seu número de CPF.';

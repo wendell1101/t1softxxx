@@ -1,0 +1,35 @@
+<html>
+  <body>
+    <script type="text/javascript">
+		function getParam(val) {
+			var result = "",
+				tmp = [];
+			var items = location.search.substr(1).split("&");
+			for (var index = 0; index < items.length; index++) {
+				tmp = items[index].split("=");
+				if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			}
+			return result;
+			};
+			var affCode=getParam('code');
+			var sourceCode=getParam('source');
+
+			var playerDomain = location.hostname;
+			var urlArr = playerDomain.split('.');
+			if(urlArr.length > 0){
+				urlArr.shift();
+				playerDomain=urlArr.join('.');
+			}
+
+			// playerDomain = 'player.'+playerDomain;
+			// window.location = location.protocol + '//' + playerDomain + "/aff/" + affCode + "/" + sourceCode + "?redirect=" + playerDomain + "/player_center/iframe_register/";
+			if(affCode) {
+				playerDomain = 'player.'+playerDomain;
+				// window.location = location.protocol + '//' + playerDomain + "/aff/" + affCode + "/" + sourceCode + "?redirect=" + playerDomain + "/player_center/iframe_register/";
+				window.location = location.protocol + '//' + playerDomain + "/aff/" + affCode + "/" + sourceCode;
+			} else {
+				window.location = '/';
+			}
+    </script>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+<svg id="bank-transfer" xmlns="http://www.w3.org/2000/svg" width="36.517" height="36.516" viewBox="0 0 36.517 36.516">
+  <path id="Path_88" data-name="Path 88" d="M31.221,37.39H33.11a1.263,1.263,0,0,1,1.259,1.259V46.2a1.263,1.263,0,0,1-1.259,1.259H11.7V49.2A1.433,1.433,0,0,1,9.33,50.259L1.491,43.491a1.4,1.4,0,0,1,0-2.128l5.8-5.009Z" transform="translate(-1 -14.095)" fill="#5bbf06"/>
+  <path id="Path_89" data-name="Path 89" d="M33.073,15.258l5.8-5.009a1.4,1.4,0,0,0,0-2.128L31.039,1.353a1.433,1.433,0,0,0-2.374,1.064V4.148H7.259A1.263,1.263,0,0,0,6,5.408v7.555a1.263,1.263,0,0,0,1.259,1.259H9.148Z" transform="translate(-2.852 -1.001)" fill="#5bbf06"/>
+  <rect id="Rectangle_56" data-name="Rectangle 56" width="23.697" height="23.697" rx="4" transform="translate(6.635 6.635)" fill="#fba520"/>
+  <g id="Group_15" data-name="Group 15" transform="translate(11.333 16.999)">
+    <path id="Path_90" data-name="Path 90" d="M19,28h2.518v8.185H19Z" transform="translate(-19 -28)" fill="#5c5c5c"/>
+    <path id="Path_91" data-name="Path 91" d="M28,28h2.518v8.185H28Z" transform="translate(-22.334 -28)" fill="#5c5c5c"/>
+    <path id="Path_92" data-name="Path 92" d="M37,28h2.518v8.185H37Z" transform="translate(-25.667 -28)" fill="#5c5c5c"/>
+  </g>
+  <path id="Path_93" data-name="Path 93" d="M33.111,23v3.148a.63.63,0,0,1-.63.63H18.63a.63.63,0,0,1-.63-.63V23Z" transform="translate(-7.297 -9.149)" fill="#9f9f9f"/>
+  <path id="Path_94" data-name="Path 94" d="M18.259,40H32.111a1.259,1.259,0,0,1,1.259,1.259v.63a.63.63,0,0,1-.63.63H17.63a.63.63,0,0,1-.63-.63v-.63A1.259,1.259,0,0,1,18.259,40Z" transform="translate(-6.926 -15.446)" fill="#9f9f9f"/>
+  <path id="Path_95" data-name="Path 95" d="M24.565,16.062l-8.311,4.659a.5.5,0,0,0,.247.944H33.123a.5.5,0,0,0,.248-.944L25.06,16.062A.5.5,0,0,0,24.565,16.062Z" transform="translate(-6.554 -6.555)" fill="#ddd"/>
+</svg>

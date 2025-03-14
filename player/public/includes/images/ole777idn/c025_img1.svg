@@ -1,0 +1,16 @@
+<svg id="money-transfer_1_" data-name="money-transfer (1)" xmlns="http://www.w3.org/2000/svg" width="37.522" height="37.928" viewBox="0 0 37.522 37.928">
+  <rect id="Rectangle_57" data-name="Rectangle 57" width="22.757" height="37.928" rx="4" transform="translate(3.251 0)" fill="#243242"/>
+  <path id="Path_96" data-name="Path 96" d="M29.51,6.625V37.894a.625.625,0,0,1-.625.625H12.625A.625.625,0,0,1,12,37.894V6.625A.625.625,0,0,1,12.625,6h5l1.251,1.251h3.752L23.882,6h5A.625.625,0,0,1,29.51,6.625Z" transform="translate(-5.746 -3.092)" fill="#e7e4dd"/>
+  <path id="Path_97" data-name="Path 97" d="M28.222,30.13a6.254,6.254,0,1,1,0-3.752H41.016V24.5l3.752,3.752-3.752,3.752V30.13Z" transform="translate(-7.246 -9.086)" fill="#fba520"/>
+  <path id="Path_98" data-name="Path 98" d="M27,28.127V27.5a1.876,1.876,0,0,0-1.876-1.876V25H23.876v.625A1.876,1.876,0,0,0,22,27.5v.625A1.876,1.876,0,0,0,23.876,30v1.876a.625.625,0,0,1-.625-.625v-.625H22v.625a1.876,1.876,0,0,0,1.876,1.876v.625h1.251V33.13A1.876,1.876,0,0,0,27,31.254v-.625a1.876,1.876,0,0,0-1.876-1.876V26.876a.625.625,0,0,1,.625.625v.625Zm-3.752,0V27.5a.625.625,0,0,1,.625-.625v1.876A.625.625,0,0,1,23.251,28.127ZM25.127,30a.625.625,0,0,1,.625.625v.625a.625.625,0,0,1-.625.625Z" transform="translate(-9.493 -10.21)" fill="#e4eff8"/>
+  <path id="Path_99" data-name="Path 99" d="M44.755,14.628H36V10.876h8.755V9l3.752,3.752L44.755,16.5Z" transform="translate(-14.737 -4.216)" fill="#5bbf06"/>
+  <path id="Path_100" data-name="Path 100" d="M10.755,47.628H2V43.876h8.755V42l3.752,3.752L10.755,49.5Z" transform="translate(-2 -16.579)" fill="#5bbf06"/>
+  <path id="Path_101" data-name="Path 101" d="M28,12h2.5v3.752H28Z" transform="translate(-11.74 -5.34)" fill="#5bbf06"/>
+  <g id="Group_16" data-name="Group 16" transform="translate(10.631 6.66)">
+    <path id="Path_102" data-name="Path 102" d="M23,12h1.251v1.251H23Z" transform="translate(-20.499 -12)" fill="#5bbf06"/>
+    <path id="Path_103" data-name="Path 103" d="M23,16h1.251v1.251H23Z" transform="translate(-20.499 -13.499)" fill="#5bbf06"/>
+    <path id="Path_104" data-name="Path 104" d="M19,12h1.251v1.251H19Z" transform="translate(-19 -12)" fill="#5bbf06"/>
+    <path id="Path_105" data-name="Path 105" d="M19,16h1.251v1.251H19Z" transform="translate(-19 -13.499)" fill="#5bbf06"/>
+  </g>
+  <path id="Path_106" data-name="Path 106" d="M22,53h5v1.251H22Z" transform="translate(-9.493 -20.7)" fill="#243242"/>
+</svg>

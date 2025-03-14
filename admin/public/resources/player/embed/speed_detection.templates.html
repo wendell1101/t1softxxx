@@ -1,0 +1,66 @@
+<!-- speed_detection_popup_tpl, params: lang_title, lang_Go -->
+<template class="speed_detection_popup_tpl hide">
+    <div id="speed_detection_popup" class="speed_detection_popup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <style>
+            .jquery-modal .speed_detection_popup {
+                background-color: lightseagreen;
+            }
+
+            .jquery-modal .modal-header {
+                background-color: lavender;
+            }
+
+            .jquery-modal .modal-body {
+                background-color: palegoldenrod;
+            }
+
+            .jquery-modal .modal-body select {
+                display: inline-block !important;
+            }
+
+            .jquery-modal .modal-body .loading.hide {
+                display: none;
+            }
+        </style>
+        <div class="modal-header">
+            <h3 id="myModalLabel">${speed_detection}</h3>
+        </div>
+        <div class="modal-body">
+            <div class="detect_list hide">
+                <select name="detected_uri">
+                    <option value="label1_value" data-uri="label1_uri">
+                        label1 ( label1_result )
+                    </option>
+                    <option value="label2_value" data-uri="label2_uri">
+                        label2 ( label2_result )
+                    </option>
+                </select>
+            </div>
+            <div class="loading hide">
+                loading...
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="translate_by_dict">${translate_by_dict}</button>
+            <button class="directily_test">${directily_test}</button>
+            <button class="detected_item_refresh">${lang_refresh}</button>
+            <button class="detected_item_go">${lang_go}</button>
+            <button class="detected_item_close">${lang_close}</button>
+        </div>
+    </div>
+</template>
+
+<!-- speed_detection_select_tpl, params: options -->
+<template class="speed_detection_select_tpl hide">
+    <select name="detected_uri">
+        ${options}
+    </select>
+</template>
+
+<!-- speed_detection_option_tpl, params: value, uri, label, spent -->
+<template class="speed_detection_option_tpl hide">
+    <option value="${value}" data-uri="${uri}">
+        ${label} ${spent}
+    </option>
+</template>

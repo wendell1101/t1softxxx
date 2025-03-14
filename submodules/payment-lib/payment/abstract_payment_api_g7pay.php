@@ -1,0 +1,298 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api.php';
+
+/**
+ * G7PAY
+ *
+ * *G7PAY_PAYMENT_API, ID: 6090
+ *
+ * Required Fields:
+ * * URL
+ * * Account
+ * * Key
+ *
+ * Field Values:
+ * * URL: https://vp8t.com/api/transaction
+ * * Account: ## User ID ##
+ * * Key: ## Secret Key ##
+ *
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+abstract class Abstract_payment_api_g7pay extends Abstract_payment_api {
+    const CALLBACK_SUCCESS = "completed";
+    const RETURN_SUCCESS_CODE = 'ok';
+
+    public function __construct($params = null) {
+        parent::__construct($params);
+    }
+
+    protected abstract function configParams(&$params, $direct_pay_extra_info);
+    protected abstract function processPaymentUrlForm($params);
+
+    public function getSecretInfoList() {
+        $secretsInfo = array('live_key', 'live_secret', 'sandbox_key', 'sandbox_secret', 'api_user_name', 'api_password');
+        return $secretsInfo;
+    }
+
+    public function generatePaymentUrlForm($orderId, $playerId, $amount, $orderDateTime, $playerPromoId = null, $enabledSecondUrl = true, $bankId = null) {
+        if ($this->shouldRedirect($enabledSecondUrl)) {
+            $url = $this->CI->utils->getPaymentUrl($this->getSystemInfo('second_url'), $this->getPlatformCode(), $amount, $playerId, $playerPromoId, false, $bankId, $orderId);
+            $result = array('success' => true, 'type' => self::REDIRECT_TYPE_URL, 'url' => $url);
+            return $result;
+        }
+
+        $this->CI->load->model(array('player_model'));
+        $order         = $this->CI->sale_order->getSaleOrderById($orderId);
+        $playerDetails = $this->CI->player_model->getPlayerDetails($playerId);
+        $firstname = (isset($playerDetails[0]) && !empty($playerDetails[0]['firstName'])) ? $playerDetails[0]['firstName'] : 'no firstName';
+        $lastname  = (isset($playerDetails[0]) && !empty($playerDetails[0]['lastName'])) ? $playerDetails[0]['lastName'] : 'no lastName';
+        $pixNumber = (!empty($playerDetails[0]['pix_number'])) ? $playerDetails[0]['pix_number'] : 'none';
+
+        $params = array();
+        $params['amount']       = $this->convertAmountToCurrency($amount);
+        $params['callback_url'] = $this->getNotifyUrl($orderId);
+        $params['out_trade_no'] = $order->secure_id;
+        $params['paid_name']    = $lastname.' '.$firstname;
+        $params['paid_account'] = $pixNumber;
+        $this->configParams($params, $order->direct_pay_extra_info);
+        $this->CI->utils->debug_log("=====================g7pay generatePaymentUrlForm params", $params);
+
+        return $this->processPaymentUrlForm($params);
+    }
+
+    # Submit POST form
+    protected function processPaymentUrlFormPost($params) {
+        $response = $this->processCurl($this->getSystemInfo('url'), $this->getSystemInfo('key'), $params, $params['out_trade_no']);
+        $this->CI->utils->debug_log("=====================g7pay processPaymentUrlFormPost response", $response);
+
+        if(isset($response['data']['uri']) && !empty($response['data']['uri'])){
+            return array(
+                'success' => true,
+                'type' => self::REDIRECT_TYPE_URL,
+                'url' => $response['data']['uri'],
+            );
+        }else if(isset($response['message']) && !empty($response['message'])){
+            return array(
+                'success' => false,
+                'type' => self::REDIRECT_TYPE_ERROR,
+                'message' => $response['message']
+            );
+        }
+        else {
+            return array(
+                'success' => false,
+                'type' => self::REDIRECT_TYPE_ERROR,
+                'message' => lang('Invalidte API response')
+            );
+        }
+    }
+
+    public function callbackFromServer($orderId, $params) {
+        $response_result_id = parent::callbackFromServer($orderId, $params);
+        return $this->callbackFrom('server', $orderId, $params, $response_result_id);
+    }
+
+    ## This will be called when user redirects back to our page from payment API
+    public function callbackFromBrowser($orderId, $params) {
+        $response_result_id = parent::callbackFromBrowser($orderId, $params);
+        return $this->callbackFrom('browser', $orderId, $params, $response_result_id);
+    }
+
+    # $source can be 'server' or 'browser'
+    private function callbackFrom($source, $orderId, $params, $response_result_id) {
+        $result = array('success' => false, 'next_url' => null, 'message' => lang('error.payment.failed'));
+        $order = $this->CI->sale_order->getSaleOrderById($orderId);
+        $processed = false;
+
+        $this->CI->utils->debug_log("=====================g7pay callbackFrom $source params", $params);
+
+        if($source == 'server' ){
+            if(empty($params)){
+                $raw_post_data = file_get_contents('php://input', 'r');
+                $this->CI->utils->debug_log("=====================g7pay raw_post_data", $raw_post_data);
+                $params = json_decode($raw_post_data, true);
+                $this->CI->utils->debug_log("=====================g7pay raw_post_data json_decode params", $params);
+            }
+            else {
+                $params = json_decode($params['requestParams'], true);
+                $this->CI->utils->debug_log("=====================g7pay json_decode params", $params);
+            }
+        }
+
+        if($source == 'server' ){
+            if(!empty($params)){
+                if (!$order || !$this->checkCallbackOrder($order, $params, $processed)) {
+                    return $result;
+                }
+            }
+        }
+
+
+        # Update order payment status and balance
+        $success = true;
+
+        # Update player balance based on order status
+        # if it's STATUS_SETTLED or STATUS_BROWSER_CALLBACK, put log, and ignore
+        $orderStatus = $this->CI->sale_order->getSaleOrderStatusById($orderId);
+        if ($orderStatus == Sale_order::STATUS_BROWSER_CALLBACK || $orderStatus == Sale_order::STATUS_SETTLED) {
+            $this->CI->utils->debug_log('callbackFrom' . ucfirst($source) . ', already get callback for order:' . $order->id, $params);
+            if ($source == 'server' && $order->status == Sale_order::STATUS_BROWSER_CALLBACK) {
+                $this->CI->sale_order->setStatusToSettled($orderId);
+            }
+        } else {
+            # update player balance
+            if ($source == 'browser') {
+                $success = $this->CI->sale_order->browserCallbackSaleOrder($order->id, 'auto broswer callback ' . $this->getPlatformCode(), false);
+            } elseif ($source == 'server') {
+                if (!empty($params)){
+                    if ($params['state'] == self::CALLBACK_SUCCESS) {
+                        $this->CI->sale_order->updateExternalInfo($order->id, $params['out_trade_no'], '', null, null, $response_result_id);
+                        $this->approveSaleOrder($order->id, 'auto server callback ' . $this->getPlatformCode(), false);
+                    } else {
+                        $this->CI->utils->debug_log("=====================checkCallbackOrder Payment status is not success", $params);
+                    }
+                }
+            }
+        }
+
+        $result['success'] = $success;
+        if ($success) {
+            $result['message'] = self::RETURN_SUCCESS_CODE;
+        } else {
+            $result['message'] = "FAIL";
+        }
+
+        if ($source == 'browser') {
+            $result['next_url'] = $this->getPlayerBackUrl();
+            $result['go_success_page'] = true;
+        }
+
+        return $result;
+    }
+
+    private function checkCallbackOrder($order, $fields, &$processed = false) {
+        $requiredFields = array(
+            'trade_no', 'amount', 'request_amount', 'out_trade_no', 'state', 'sign'
+        );
+
+        foreach ($requiredFields as $f) {
+            if (!array_key_exists($f, $fields)) {
+                $this->writePaymentErrorLog("=====================g7pay checkCallbackOrder Missing parameter: [$f]", $fields);
+                return false;
+            }
+        }
+
+        # is signature authentic?
+        if (!$this->validateSign($fields)) {
+            $this->writePaymentErrorLog("======================g7pay checkCallbackOrder Signature Error", $fields);
+            return false;
+        }
+
+        $processed = true; # processed is set to true once the signature verification pass
+
+        $check_amount = $this->convertAmountToCurrency($order->amount);
+        if ($fields['amount'] != $check_amount) {
+            $this->writePaymentErrorLog("======================g7pay checkCallbackOrder Payment amount is wrong, expected <= ". $check_amount, $fields);
+            return false;
+        }
+
+        if ($fields['out_trade_no'] != $order->secure_id) {
+            $this->writePaymentErrorLog("======================g7pay checkCallbackOrder order IDs do not match, expected [$order->secure_id]", $fields);
+            return false;
+        }
+
+        # everything checked ok
+        return true;
+    }
+
+    public function directPay($order = null) {
+        return array('success' => false); # direct pay not supported by this API
+    }
+
+    # -- signatures --
+    private function sign($params) {
+    }
+
+    private function createSignStr($params) {
+    }
+
+    private function validateSign($params) {
+        $apiToken = $this->getSystemInfo('key');
+        $notifyToken = $this->getSystemInfo('notify_token');
+        ksort($params);
+        $signStr = '';
+        foreach($params as $key => $value) {
+            if($key == 'sign'){
+                continue;
+            }
+            $signStr .= "$key=$value&";
+        }
+        $signStr = rtrim($signStr, '&');
+        $sign = md5($signStr.$apiToken.$notifyToken);
+
+        if($params['sign'] == $sign){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    # -- Private functions --
+    # After payment is complete, the gateway will invoke this URL asynchronously
+    public function getNotifyUrl($orderId) {
+        return parent::getCallbackUrl('/callback/process/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+
+    ## After payment is complete, the gateway will send redirect back to this URL
+    private function getReturnUrl($orderId) {
+        return parent::getCallbackUrl('/callback/browser/success/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+
+    protected function getReturnFailUrl($orderId) {
+        return parent::getCallbackUrl('/callback/show_error/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+
+    ## Format the amount value for the API
+    protected function convertAmountToCurrency($amount) {
+        $convert_multiplier = $this->getSystemInfo('convert_multiplier', 1);
+        return number_format($amount * $convert_multiplier, 2, '.', '');
+    }
+
+    protected function processCurl($url, $token, $params, $secure_id, $post = true) {
+        $header_array = array('Authorization: Bearer '.$token);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        if($post){
+            $header_array = array(
+                'Accept: application/json',
+                'Authorization: Bearer '. $token,
+                'Content-Type: application/json',
+            );
+            curl_setopt($ch, CURLOPT_POST, $post);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+        }
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header_array);
+        curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+
+        $this->setCurlProxyOptions($ch);
+
+        $response    = curl_exec($ch);
+        $errCode     = curl_errno($ch);
+        $error       = curl_error($ch);
+        $statusCode  = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+        curl_close($ch);
+
+        $this->CI->utils->debug_log('=====================g7pay processCurl url', $url, 'header_array', $header_array, 'params', $params , 'response', $response, 'errCode', $errCode, 'error', $error, 'statusCode', $statusCode);
+        $response_result_id = $this->submitPreprocess($params, $response, $url, $response, array('errCode' => $errCode, 'error' => $error, 'statusCode' => $statusCode), $secure_id);
+        $response = json_decode($response, true);
+        return $response;
+    }
+
+}

@@ -1,0 +1,26 @@
+<?php
+$lang['Account History'] = "交易历史";
+$lang['role.77'] = "取款列表";
+$lang['pay.reqtime'] = "提交时间";
+$lang['Type'] = '支付类型';
+$lang['validation.retypePassword'] = '两次输入的密码不一致。';
+$lang['lang.logIn'] = "立即登录";
+$lang['lang.forgotpasswd'] = "忘记密码";
+$lang['header.home'] = "首页";
+$lang['footer.01'] = "关于威德胜";
+$lang['a_header.affiliate'] = "代理";
+$lang['footer_contact_us'] = '联系我们';
+$lang['footer_terms_and_conditions'] = '附带条规';
+$lang['footer_responsible_gambling'] = '博彩责任';
+$lang['footer.02'] = "隐私政策";
+$lang['Withdraw pending ask customer service'] = '';
+$lang['Promotions'] = "优惠";
+$lang['a_reg.47'] = 'Skype';
+$lang['Withdrawal History'] = 'Daftar Penarikan';
+$lang['On request, we will close any account for a minimum period of 6 months during which time it will not be possible for the account to be re-opened for any reason. You can close your account under our responsible gaming self-exclusion policy at anytime by contacting our Customer Support team by emailing helpdesk@smartbackend.com with the username or registered email details of the account you wish to close.'] = "根据要求，我们将关闭任何帐户不少于6个月的时间，在此期间，无论任何原因帐户都不会重新开启。您可以随时通过我们的博彩责任自我排除政策关闭您的帐户，只需联系我们的客户支援团队，通过发送电邮到cs@winroxy99.com以及您希望关闭的帐户的用户名或注册电子邮件详细信息。";
+$lang['Upon expiry of the self-exclusion period you may request to re-open a closed account by contacting our Customer Support team by emailing helpdesk@smartbackend.com with the details of the account you wish to re-open. All requests to re-open a closed account will be reviewed by the Operator.'] = "在自我控管期限届满后，您可以通过联系我们的客户支援团队，通过发送电邮到cs@winroxy99.com了解您希望重新开立的帐户的详细信息，请求重新开设已关闭的帐户。所有要求重开的账户都将由客户支援组进行审核。";
+$lang['PEP（C6）'] = "PEP/SANCTION";
+$lang['Set Wagering Limit'] = '设定投注限额';
+$lang['Instant Message 1']='微信';
+$lang['Instant Message 2']='QQ';
+$lang['Instant Message 3']='Skype';

@@ -1,0 +1,19 @@
+<?php
+$lang['sale_orders.status.3'] = "处理中";
+$lang['transaction.status.1'] = "成功";
+$lang['transaction.status.2'] = "失敗";
+$lang['Pending'] = "处理中";
+$lang['Declined'] = "失敗";
+$lang['Approved'] = "成功";
+$lang['cashier.131'] = "处理中";
+$lang['cashier.123'] = "成功";
+$lang['cashier.98'] = "失敗";
+$lang['cashier.133'] = "失敗";
+$lang['Approved Pre-application'] = '处理中';
+$lang['online_payment_is_not_available'] = "此支付方式目前无法使用，请使用其他方式支付";
+$lang['validation.firstNameRegex'] = '请输入真实姓名！';
+$lang['validation.lastNameRegex'] = '请输入真实姓名！';
+$lang['Remember me'] = '记住密码';
+$lang['Instant Message 1']='微信';
+$lang['Instant Message 2']='QQ';
+$lang['Instant Message 3']='Skype';

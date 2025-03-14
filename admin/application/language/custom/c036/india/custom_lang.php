@@ -1,0 +1,36 @@
+<?php
+$lang['sidebar_login']				= 'लॉग इन करें';
+$lang['sidebar_register']			= 'रजिस्टर करें';
+$lang['sidebar_the_product']		= 'उत्पाद';
+$lang['sidebar_home']				= 'मुख पृष्ठ';
+$lang['sidebar_slots']				= 'स्लॉट्स';
+$lang['sidebar_live_casino']		= 'लाइव कैसीनो';
+$lang['sidebar_sports_betting']		= 'खेलो पर जुआ';
+$lang['sidebar_shoot_fish']			= 'मछली मारो';
+$lang['sidebar_benefits']			= 'लाभ';
+$lang['sidebar_all_promotions']		= 'सभी पदोन्नति';
+$lang['sidebar_vip']				= 'वीआईपी';
+$lang['sidebar_alliance']			= 'संधि';
+$lang['sidebar_set_up']				= 'सेट अप';
+$lang['sidebar_account_mgmt']		= 'खाता प्रबंधन';
+$lang['sidebar_resp_gaming']		= 'जुए के लिए जिम्मेदार';
+$lang['sidebar_help']				= 'मदद';
+$lang['sidebar_contact_us']			= 'संपर्क करें।';
+$lang['sidebar_terms_and_conds']	= 'नियम और शर्तें';
+$lang['sidebar_faq']				= 'सामान्य प्रश्न';
+$lang['sidebar_about_us']			= 'हमारे बारे में';
+
+$lang['footer_contact_us']					= 'संपर्क करें।';
+$lang['24_hour_service']					= 'उपलब्ध 24/7';
+$lang['livechat']							= 'सीधी बातचीत';
+$lang['footer_beginners_guide']				= 'शुरुआती मार्गदर्शक';
+$lang['footer_easy_to_understand']			= '5 मिनट के भीतर समझने में आसान';
+$lang['footer_learn_more']					= 'और अधिक जानें';
+$lang['footer_property']					= 'संपत्ति';
+$lang['footer_fast_game_always']			= 'फास्ट गेम, हमेशा जुड़ा हुआ';
+$lang['footer_login_to_member_dashboard']	= 'सदस्य डैशबोर्ड में प्रवेश करें';
+$lang['footer_gambling_license']			= 'जुआ लाइसेंस';
+$lang['footer_legal_license_from']			= 'पैगकोर से कानूनी लाइसेंस';
+$lang['footer_check']						= 'जाँच';
+$lang['All rights reserved'] = "सभी अधिकार सुरक्षित";
+$lang['customer.service.mobile.main.menu'] ="7x24 सर्विस";

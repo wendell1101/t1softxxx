@@ -1,0 +1,36 @@
+<?php
+$lang['sidebar_login']				= 'Gabung';
+$lang['sidebar_register']			= 'Daftar';
+$lang['sidebar_the_product']		= 'Produk';
+$lang['sidebar_home']				= 'Halaman muka';
+$lang['sidebar_slots']				= 'Slot';
+$lang['sidebar_live_casino']		= 'Kasino langsung';
+$lang['sidebar_sports_betting']		= 'Judi olahraga';
+$lang['sidebar_shoot_fish']			= 'Tembak ikan';
+$lang['sidebar_benefits']			= 'Manfaat';
+$lang['sidebar_all_promotions']		= 'Semua promosi';
+$lang['sidebar_vip']				= 'VIP';
+$lang['sidebar_alliance']			= 'persekutuan';
+$lang['sidebar_set_up']				= 'Mendirikan';
+$lang['sidebar_account_mgmt']		= 'Manajemen akun';
+$lang['sidebar_resp_gaming']		= 'Bertanggung jawab untuk perjudian';
+$lang['sidebar_help']				= 'Tolong';
+$lang['sidebar_contact_us']			= 'Hubungi kami.';
+$lang['sidebar_terms_and_conds']	= 'Syarat dan ketentuan';
+$lang['sidebar_faq']				= 'FAQ';
+$lang['sidebar_about_us']			= 'Tentang kami';
+
+$lang['footer_contact_us']					= 'Hubungi kami.';
+$lang['24_hour_service']					= 'Tersedia 24/7';
+$lang['livechat']							= 'Obrolan langsung';
+$lang['footer_beginners_guide']				= 'Panduan pemula';
+$lang['footer_easy_to_understand']			= 'Mudah dimengerti dalam 5 menit';
+$lang['footer_learn_more']					= 'Belajarlah lagi';
+$lang['footer_property']					= 'Properti';
+$lang['footer_fast_game_always']			= 'Game cepat, selalu terhubung';
+$lang['footer_login_to_member_dashboard']	= 'Masuk ke Dasbor Anggota';
+$lang['footer_gambling_license']			= 'Lisensi perjudian';
+$lang['footer_legal_license_from']			= 'Lisensi legal dari';
+$lang['footer_check']						= 'Memeriksa';
+$lang['full_custom_affiliate_message_after_registration'] = "Terima kasih telah mengajukan permohonan akun afiliasi Honor Casino, operator afiliasi kami akan menghubungi Anda untuk mengaktifkan akun Anda dalam waktu 24 jam. Anda juga dapat memeriksa kemajuan aktivasi melalui Obrolan Langsung atau Kirim email kepada kami: mailto:Honoraff@gmail.com.";
+$lang['customer.service.mobile.main.menu'] = '7x24 Layanan';

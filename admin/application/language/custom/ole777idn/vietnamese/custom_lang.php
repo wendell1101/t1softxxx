@@ -1,0 +1,46 @@
+<?php
+$lang['imAccount'] = 'WeChat';
+$lang['imAccount2'] = 'Line';
+$lang['imAccount3'] = '	BBM';
+$lang['imAccount4'] = 'WhatsApp';
+$lang['imAccount5'] = 'Facebook';
+$lang["USDT-Crypto"] = "USDT";
+$lang['operator_settings.sms_api_list.0'] = 'Datacom/InfoBip';
+$lang['operator_settings.sms_api_list.1'] = 'Clickatell';
+$lang['operator_settings.sms_api_list.2'] = 'Flyfonetalk';
+$lang['operator_settings.sms_api_list.3'] = 'Movider';
+$lang['deposit_amount_hint_on_flag_of_4'] = 'PERHATIAN!<br><b>Sistem Deposit Ini Akan Dikenakan Biaya Sebesar 20% Dari Nominal Deposit</b>';
+
+$lang['sidebar_shoot_fish']	 = 'Fish Games';
+$lang['aff.login.contact.qq'] = 'BBM';
+$lang['Withdrawal Amount Note'] = 'Withdrawal tanpa bonus harus menerapkan 1x turnover dari nilai deposit';
+$lang['reg.notify.ole777.realname'] = "Vui lòng điền họ tên của bạn. Tên phải giống với tên tài khoản ngân hàng của bạn.";
+$lang['Instant Message 1']='Whatsapp';
+$lang['Instant Message 2']='Telegram';
+$lang['Instant Message 3']='Facebook';
+$lang['a_reg.29'] = "Whatsapp";
+$lang['a_reg.9'] = "Whatsapp";
+$lang['a_reg.30'] = "Telegram";
+$lang['a_reg.10'] = "Telegram";
+$lang['a_reg.47'] = 'Facebook';
+$lang['pay.payment_account_number'] = "Tài Khoản/ Đường Dẫn Ví";
+$lang['pay.payment_branch_name'] = "Tên Ngân Hàng/ Loại Mạng";
+$lang['Branch'] = "Tên Ngân Hàng/ Loại Mạng";
+$lang['formvalidation.is_unique.affiliate.register'] = "The %s field must contain a unique value.";
+$lang['affiliate.register.username'] = 'Username';
+$lang['affiliate.register.username.sec'] = 'username';
+$lang['pay.second_category_online_bank'] = '3rd Party Online';
+$lang['affiliate.register.email'] = 'Alamat email';
+$lang['affiliate.register.email.sec'] = 'alamat email';
+$lang['pay.second_category_qqpay'] = 'PULSA';
+$lang['player.withdraw.submit'] = 'Rút tiền';
+$lang['player.withdrawal.acctname'] = 'Tên người thụ hưởng';
+$lang['player.withdrawal.acctnumber'] = 'Số tài khoản';
+$lang['player.withdraw.custom_success_message.1'] = 'Processing time is about 2-5 minutes';
+$lang['player.withdraw.custom_success_message.2'] = 'For more information, can be found in Withdrawal History';
+$lang['player.withdraw.custom_go_menu'] = 'Go Back To Menu';
+$lang['promo_custom_modal.ole777idn.alert-danger'] = 'Gagal';
+$lang['promo_custom_modal.ole777idn.apply_success'] = 'Selamat! Anda sudah join Promo ini! Perjalanan Anda menjadi Pemenang Besar telah dimulai!';
+$lang['promo_custom_modal.ole777idn.dont_allow_not_within_claim_time'] = 'Oopss... Promo belum dimulai. Silakan kembali klik lagi pada tanggal yang tertera di halaman Promo.';
+$lang['promo_custom_modal.ole777idn.not_allow_other_promo'] = 'Oopss... Anda masih mempunyai syarat Turnover Bonus yang harus dipenuhi.<br>
+Untuk JOIN PROMO, silakan penuhi Turnover Bonus terlebih dahulu; atau hubungi Live Chat untuk info lebih lanjut.';

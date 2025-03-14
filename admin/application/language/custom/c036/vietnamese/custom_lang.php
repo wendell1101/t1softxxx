@@ -1,0 +1,36 @@
+<?php
+$lang['sidebar_login']				= 'Đăng nhập';
+$lang['sidebar_register']			= 'Đăng ký';
+$lang['sidebar_the_product']		= 'Sản phẩm';
+$lang['sidebar_home']				= 'Trang chủ';
+$lang['sidebar_slots']				= 'Slots';
+$lang['sidebar_live_casino']		= 'Sòng bạc trực tiếp';
+$lang['sidebar_sports_betting']		= 'Cá cược thể thao';
+$lang['sidebar_shoot_fish']			= 'Bắn cá';
+$lang['sidebar_benefits']			= 'Những lợi ích';
+$lang['sidebar_all_promotions']		= 'Tất cả các chương trình khuyến mãi';
+$lang['sidebar_vip']				= 'CAO CẤP';
+$lang['sidebar_alliance']			= 'liên minh';
+$lang['sidebar_set_up']				= 'Thiết lập';
+$lang['sidebar_account_mgmt']		= 'Quản lý tài khoản';
+$lang['sidebar_resp_gaming']		= 'Chịu trách nhiệm về cờ bạc';
+$lang['sidebar_help']				= 'Cứu giúp';
+$lang['sidebar_contact_us']			= 'Liên hệ chúng tôi.';
+$lang['sidebar_terms_and_conds']	= 'Các điều khoản và điều kiện';
+$lang['sidebar_faq']				= 'Câu hỏi thường gặp';
+$lang['sidebar_about_us']			= 'Về chúng tôi';
+
+$lang['footer_contact_us']					= 'Liên hệ chúng tôi.';
+$lang['24_hour_service']					= 'Có sẵn 24/7';
+$lang['livechat']							= 'Trò chuyện trực tiếp';
+$lang['footer_beginners_guide']				= 'Hướng dẫn cho người mới bắt đầu';
+$lang['footer_easy_to_understand']			= 'Dễ hiểu trong vòng 5 phút';
+$lang['footer_learn_more']					= 'Tìm hiểu thêm';
+$lang['footer_property']					= 'Bất động sản';
+$lang['footer_fast_game_always']			= 'Trò chơi nhanh, luôn kết nối';
+$lang['footer_login_to_member_dashboard']	= 'Đăng nhập vào Trang tổng quan thành viên';
+$lang['footer_gambling_license']			= 'Giấy phép cờ bạc';
+$lang['footer_legal_license_from']			= 'Giấy phép hợp pháp từ';
+$lang['footer_check']						= 'Kiểm tra';
+$lang['full_custom_affiliate_message_after_registration'] = "Cảm ơn bạn đã đăng ký tài khoản liên kết của Honor Casino ， nhà điều hành đơn vị liên kết của chúng tôi sẽ liên hệ với bạn để kích hoạt tài khoản của bạn trong vòng 24 giờ. Bạn cũng có thể kiểm tra tiến trình kích hoạt bằng cách Chat Trực tiếp hoặc Gửi thư cho chúng tôi: mailto: Honoraff@gmail.com.";
+$lang['customer.service.mobile.main.menu'] = "7x24 Dịch vụ";

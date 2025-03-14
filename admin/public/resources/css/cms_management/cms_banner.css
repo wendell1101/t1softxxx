@@ -1,0 +1,242 @@
+.searchbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    clear: both;
+    padding-top: 15px;
+}
+
+.searchbar .dataTables_filter {
+    float: right;
+}
+
+.file-upload-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 4px dashed #dbe1e8;
+    padding: 20px;
+    position:relative; 
+}
+
+.file-upload-box label {
+    background-color: #87b2d5;
+    padding: 10px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 50px;
+    position: relative;
+    /* z-index: 11; */
+}
+
+.file-upload-box input {
+    display: none;
+}
+
+.file-upload-box label::before {
+    content: '';
+    background: url('/resources/images/cmslogo/cloud.png') center no-repeat;
+    background-size: contain;
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    display: block;
+    top: -45px;
+    /* z-index: 11; */
+
+    margin: auto;
+    left: 0;
+    right: 0;
+
+}
+
+.file-upload-box p {
+    margin-bottom: 5px;
+}
+
+p.note {
+    color: #eb4c4c;
+    font-style: italic;
+    clear: both;
+}
+
+.file-upload-box p.note span {
+    font-weight: bold;
+}
+
+.pl-0 {
+    padding-left: 0 !important;
+}
+
+.banner-fields {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.banner-fields .form-group {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.banner-fields .form-group label,
+.banner-fields .form-group p {
+    margin-bottom: 5px;
+    display: block;
+}
+
+.banner-fields .form-group input[type="text"],
+.banner-fields .form-group input[type="number"] {
+    width: 100%;
+}
+
+.form-group.link {
+    border-top: 1px solid #f2f2f2;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 20px 0;
+    margin-top: 25px;
+}
+
+.promoBanner {
+    display: none;
+}
+
+.banner-thumb {
+    height: 40px;
+}
+
+table.table tr th,
+table.table tr td {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+tr.child {
+    display: none;
+}
+
+tr.child.show {
+    display: table-row !important;
+}
+
+.more-information {
+    display: flex;
+    justify-content: flex-start;
+    text-align: left;
+    text-decoration: none;
+    margin-left: 45px;
+}
+
+.more-information .info-group {
+    margin-right: 80px;
+}
+
+.child .actionVipGroup {
+    text-align: left;
+    padding-left: 45px;
+}
+
+a.more-info {
+    text-decoration: none;
+}
+
+a.more-info:before {
+    background: #4379b2;
+    content: '+';
+    width: 18px;
+    height: 18px;
+    color: #fff;
+    display: block;
+    border-radius: 50px;
+    margin: auto;
+    font-weight: bold;
+    text-align: center;
+}
+
+a.more-info.show:before {
+    background: #c3413b;
+    content: '-';
+    text-align: center;
+}
+.status.active {
+    color: #5AAC44;
+}
+.status.suspended {
+    color: #c3413b;
+}
+.wa-switch {
+    position: relative;
+    display: inline-block;
+    width: 45px;
+    height: 20px;
+    margin-top: 10px;
+}
+.wa-switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+}
+.wa-switch input {
+    display: none;
+}
+.wa-switch .slider.round {
+    border-radius: 34px;
+}
+.wa-switch input:checked + .slider {
+    background-color: rgba(70, 170, 106, .5);
+}
+.wa-switch .slider.round:before {
+    position: absolute;
+    content: "";
+    height: 0;
+    width: calc(100% * 26/45);
+    padding: calc(100%/2 * 26/45) 0;
+    left: 0px;
+    bottom: -3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    box-shadow: 2px 1px 5px rgb(0 0 0 / 40%);
+    background-color: #f2f2f2;
+}
+.wa-switch input:checked + .slider.round:before {
+    transform: translateX(20px);
+    box-shadow: -2px 1px 5px rgb(0 0 0 / 40%);
+    background-color: #46aa6a;
+}
+
+.image_upload {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    text-align: center;
+    /* z-index:10; */
+    display: none;
+}
+
+.image_upload img {
+    width: auto;
+    height: 90%;
+    margin-top: 10px;
+    display: none;
+}
+
+.upload-box-hover {
+    border-style: solid;
+}
+
+
+
+
+
+    
+
+
+

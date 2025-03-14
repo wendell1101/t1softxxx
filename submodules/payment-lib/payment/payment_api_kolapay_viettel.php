@@ -1,0 +1,48 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api_kolapay.php';
+
+/**
+ *
+ * kola
+ *
+ *
+ * * 'KOLAPAY_VIETTEL_PAYMENT_API', ID 6147
+ *
+ * Required Fields:
+ * * URL
+ * * Account
+ * * Key
+ *
+ * Field Values:
+ * * URL: https://api.kola77.org/api/create
+ * * Account: ## Merchant ID ##
+ * * Key: ## Secret Key ##
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+class Payment_api_kolapay_viettel extends Abstract_payment_api_kolapay {
+
+    public function getPlatformCode() {
+        return KOLAPAY_VIETTEL_PAYMENT_API;
+    }
+
+    public function getPrefix() {
+        return 'kolapay_viettel';
+    }
+
+    protected function configParams(&$params, $direct_pay_extra_info) {
+        $params["payMethod"] = self::PAYWAY_VIETTEL;
+    }
+
+    protected function processPaymentUrlForm($params) {
+        return $this->processPaymentUrlFormPost($params);
+    }
+
+    public function getPlayerInputInfo() {
+        return array(
+            array('name' => 'deposit_amount', 'type' => 'float_amount', 'label_lang' => 'cashier.09'),
+        );
+    }
+
+}

@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-0": {
+            "WebPushApp": "src"
+        }
+    },
+    "require": {
+        "cboden/ratchet": "*",
+		"illuminate/database": "*"
+    }
+}

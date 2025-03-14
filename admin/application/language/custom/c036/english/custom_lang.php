@@ -1,0 +1,36 @@
+<?php
+$lang['sidebar_login']				= 'Login';
+$lang['sidebar_register']			= 'Register';
+$lang['sidebar_the_product']		= 'The product';
+$lang['sidebar_home']				= 'Home page';
+$lang['sidebar_slots']				= 'Slots';
+$lang['sidebar_live_casino']		= 'Live casino';
+$lang['sidebar_sports_betting']		= 'Sports betting';
+$lang['sidebar_shoot_fish']			= 'Shoot fish';
+$lang['sidebar_benefits']			= 'Benefits';
+$lang['sidebar_all_promotions']		= 'All promotions';
+$lang['sidebar_vip']				= 'VIP';
+$lang['sidebar_alliance']			= 'alliance';
+$lang['sidebar_set_up']				= 'Set up';
+$lang['sidebar_account_mgmt']		= 'Account management';
+$lang['sidebar_resp_gaming']		= 'Responsible for gambling';
+$lang['sidebar_help']				= 'help';
+$lang['sidebar_contact_us']			= 'Contact us';
+$lang['sidebar_terms_and_conds']	= 'Terms and Conditions';
+$lang['sidebar_faq']				= 'FAQ';
+$lang['sidebar_about_us']			= 'About us';
+
+$lang['footer_contact_us']					= 'Contact us.';
+$lang['24_hour_service']					= 'Available 24/7';
+$lang['livechat']							= 'Live chat';
+$lang['footer_beginners_guide']				= 'Beginners guide';
+$lang['footer_easy_to_understand']			= 'Easy to understand within 5 minutes';
+$lang['footer_learn_more']					= 'Learn more';
+$lang['footer_property']					= 'Property';
+$lang['footer_fast_game_always']			= 'Fast game, always connected';
+$lang['footer_login_to_member_dashboard']	= 'Login to Member Dashboard';
+$lang['footer_gambling_license']			= 'Gambling license';
+$lang['footer_legal_license_from']			= 'Legal license from';
+$lang['footer_check']						= 'Check';
+$lang['full_custom_affiliate_message_after_registration'] = "Thank you for applying for a Honor Casino affiliate account，our affiliate operator will contact you to activate your account within 24 hours. You can also check the activation progress by Live Chat or Mail us : mailto:Honoraff@gmail.com.";
+$lang['customer.service.mobile.main.menu'] = '7x24 Service';

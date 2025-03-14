@@ -1,0 +1,54 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api_otpay.php';
+/**
+ * OTPAY
+ *
+ * * OTPAY_QUICKPAY_PAYMENT_API, ID: 5236
+ *
+ * Required Fields:
+ * * URL
+ * * Account
+ * * Key
+ *
+ * Field Values:
+ * * URL: http://47.75.122.187:39318/mpay/index.php/otpay/unifiedOrder
+ * * Account: ## Merchant ID ##
+ * * Key: ## Secret Key ##
+ *
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+class Payment_api_otpay_quickpay extends Abstract_payment_api_otpay {
+
+    public function getPlatformCode() {
+        return OTPAY_QUICKPAY_PAYMENT_API;
+    }
+
+    public function getPrefix() {
+        return 'otpay_quickpay';
+    }
+
+    protected function configParams(&$params, $direct_pay_extra_info) {
+        $params['payType'] = self::PAYTYPE_QUICKPAY;
+    }
+
+    # Hide bank selection drop-down
+    public function getPlayerInputInfo() {
+        $type = $this->getSystemInfo('float_amount_limit')? 'float_amount_limit' : 'float_amount' ;
+        $float_amount_limit_msg = $this->getSystemInfo('float_amount_limit_msg')?$this->getSystemInfo('float_amount_limit_msg'):'請輸入上方金額';
+        if($type == 'float_amount_limit'){
+            return array(
+                array('name' => 'deposit_amount', 'type' => $type, 'label_lang' => 'cashier.09', 'float_amount_limit' => $this->getSystemInfo('float_amount_limit'), 'float_amount_limit_msg' => $float_amount_limit_msg),
+            );
+        }else{
+            return array(
+                array('name' => 'deposit_amount', 'type' => $type, 'label_lang' => 'cashier.09'),
+            );
+        }
+    }
+
+    protected function processPaymentUrlForm($params) {
+        return $this->processPaymentUrlFormPost($params);
+    }
+}

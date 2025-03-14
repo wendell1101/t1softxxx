@@ -1,0 +1,4 @@
+admin/application/models/pinnacle_game_logs.php
+admin/application/libraries/game_list_lib.php
+admin/application/controllers/evoplay_seamless_service_api.php
+admin/application/controllers/cmd_seamless_service_api.php

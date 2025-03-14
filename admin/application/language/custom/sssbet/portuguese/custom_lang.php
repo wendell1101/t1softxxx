@@ -1,0 +1,32 @@
+<?php
+$lang['validation.lengthRangeContent'] = "";
+$lang['Recharge'] = 'Recarga';
+$lang['Users'] = 'Usuário';
+$lang['validation.availabilityUsername_checking'] = 'Verificando o nome de usuário';
+$lang['Welcome to SAMBA, you can enjoy the following exclusive offers for new players! Go and collect your prize!'] = "Bem-vindo ao SSSBET, você pode desfrutar das seguintes ofertas exclusivas para novos jogadores!";
+$lang['redemptionCode.apply.useLimit'] = 'O código de resgate atual está incorreto, use um código de resgate válido.';
+$lang['redemptionCode.apply.applySuccess'] = 'O resgate foi bem-sucedido, %s BRL foram creditados.';
+$lang['redemptionCode.apply'] = 'Resgatar';
+$lang['redemptionCode.redemptionCode'] = 'Resgatar código';
+$lang['Transaction History'] = "Histórico de transação";
+$lang['friendReferral.earnedBonus'] = 'Bônus Total';
+$lang['friendReferral.countAvlibleReferral'] = 'Eficaz';
+$lang['Withdrawal Amount'] = 'Quantidade retirada';
+$lang['Referral Program'] = 'Programa de referência';
+$lang['cashier.withdrawal.withdraw_condition.hint'] = 'O sistema leva cerca de 30 minutos para atualiza.';
+$lang['Email address entered does not match email on your profile'] = 'O endereço de e-mail inserido não corresponde ao e-mail em seu perfil';
+$lang['Search Bank'] = "Pesquisar Banco";
+$lang['financial_account.pixtype'] = 'Tipo Pix';
+$lang['financial_account.CPF_number'] = 'Número do CPF';
+$lang['Deposit successful'] = "Depósito bem sucedido";
+$lang['Cancel deposit'] = "cancelar depósito";
+$lang['Add E-wallet Account'] = "ADICIONAR CONTA E-WALLET";
+$lang['Add Crypto Account'] = "ADICIONAR CONTA CRIPTOGRÁFICA";
+$lang['con.23'] = ' Entre em contato conosco para ativar sua conta proxy:';
+$lang['aff.login.contact.qq'] = 'Telegram';
+$lang['aff.login.contact.skype'] = 'Whstsapp';
+$lang['aff.login.contact.wechat'] = 'Email';
+$lang['aff.login.contact.email'] = 'Facebook';
+$lang['mess.20'] = 'Esta mensagem não permite respostas.';
+$lang['Sms.invalid phone number'] = 'Não há um número de celular válido ou o preço do país não está configurado';
+?>

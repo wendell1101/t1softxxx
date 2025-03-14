@@ -1,0 +1,26 @@
+{
+	"sEmptyTable":     "<span class='circle__bg'><img src='/resources/images/datatables_js_sEmptyTable.png'></span><div class='text-empty-result'><h4>कोई परिणाम नहीं मिला</h4><p>आप जो खोज रहे हैं उसे खोजने के लिए अपने खोज फ़िल्टर को समायोजित करने का प्रयास करें।</p></div>",
+	"sInfo":           "Showing _START_ to _END_ of _TOTAL_ entries",
+	"sInfoEmpty":      "Showing 0 to 0 of 0 entries",
+	"sInfoFiltered":   "(filtered from _MAX_ total entries)",
+	"sInfoPostFix":    "",
+	"sInfoThousands":  ",",
+	"sLengthMenu":     "Show _MENU_ entries",
+	"sLoadingRecords": "Loading...",
+	"sProcessing":     "Processing...",
+	"sSearch":         "Search:",
+	"sZeroRecords":    "No matching records found",
+	"oPaginate": {
+		"sFirst":    "First",
+		"sLast":     "Last",
+		"sPrevious": "Previous",
+		"sNext":     "Next",
+		"select": {
+			"template": "To _SELECT_ page，Total of _TOTAL_ page"
+		}
+	},
+	"oAria": {
+		"sSortAscending":  ": activate to sort column ascending",
+		"sSortDescending": ": activate to sort column descending"
+	}
+}

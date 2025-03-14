@@ -1,0 +1,32 @@
+[
+  {
+    "game_platform_id": "5672",
+    "game_name": "_json:{\"1\":\"Fish Hunter\",\"2\":\"捕鱼达人\",\"3\":\"Fish Hunter\",\"4\":\"Fish Hunter\",\"5\":\"Fish Hunter\"}",
+    "game_code": "1006",
+    "dlc_enabled": "0",
+    "progressive": "0",
+    "flash_enabled": "0",
+    "offline_enabled": "0",
+    "mobile_enabled": "1",
+    "note": null,
+    "status": "0",
+    "flag_show_in_site": "0",
+    "no_cash_back": "0",
+    "void_bet": "0",
+    "attributes": null,
+    "game_order": null,
+    "html_five_enabled": "1",
+    "english_name": "Fish Hunter",
+    "external_game_id": "1006",
+    "clientid": null,
+    "moduleid": null,
+    "related_game_desc_id": null,
+    "enabled_freespin": "0",
+    "sub_game_provider": null,
+    "enabled_on_android": "1",
+    "enabled_on_ios": "1",
+    "flag_new_game": "1",
+    "demo_link": null,
+    "game_type_code": "fishing_game"
+  }
+]

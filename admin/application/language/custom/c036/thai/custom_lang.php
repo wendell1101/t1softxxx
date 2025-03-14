@@ -1,0 +1,23 @@
+<?php
+$lang['sidebar_login']				= 'เข้าสู่ระบบ';
+$lang['sidebar_register']			= 'ลงทะเบียน';
+$lang['sidebar_the_product']		= 'ผลิตภัณฑ์';
+$lang['sidebar_home']				= 'หน้าแรก';
+$lang['sidebar_slots']				= 'สล็อต';
+$lang['sidebar_live_casino']		= 'คาสิโนสด';
+$lang['sidebar_sports_betting']		= 'เดิมพันกีฬา';
+$lang['sidebar_shoot_fish']			= 'ยิงปลา';
+$lang['sidebar_benefits']			= 'สิทธิประโยชน์';
+$lang['sidebar_all_promotions']		= 'โปรโมชั่นทั้งหมด';
+$lang['sidebar_vip']				= 'VIP';
+$lang['sidebar_alliance']			= 'พันธมิตร';
+$lang['sidebar_set_up']				= 'ตั้งค่า';
+$lang['sidebar_account_mgmt']		= 'การจัดการบัญชี';
+$lang['sidebar_resp_gaming']		= 'รับผิดชอบในการเดิมพัน';
+$lang['sidebar_help']				= 'ช่วยเหลือ';
+$lang['sidebar_contact_us']			= 'ติดต่อเรา';
+$lang['sidebar_terms_and_conds']	= 'ข้อกำหนดและเงื่อนไข';
+$lang['sidebar_faq']				= 'FAQ';
+$lang['sidebar_about_us']			= 'เกี่ยวกับเรา';
+$lang['full_custom_affiliate_message_after_registration'] = "ขอขอบคุณที่สมัครบัญชีพันธมิตร Honor Casino ผู้ให้บริการพันธมิตรของเราจะติดต่อคุณเพื่อเปิดใช้งานบัญชีของคุณภายใน 24 ชั่วโมง คุณสามารถตรวจสอบความคืบหน้าในการเปิดใช้งานได้ทางแชทสดหรือส่งอีเมลหาเราที่: mailto:Honoraff@gmail.com";
+$lang['customer.service.mobile.main.menu'] = "7x24 บริการ";

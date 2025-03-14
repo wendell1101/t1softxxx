@@ -1,0 +1,32 @@
+[
+    {
+        "game_platform_id": "6359",
+        "game_name": "_json:{\"1\":\"HP Lottery\",\"2\":\"HP Lottery\",\"3\":\"HP Lottery\",\"4\":\"HP Lottery\",\"5\":\"HP Lottery\"}",
+        "game_code": "HPL",
+        "progressive": false,
+        "dlc_enabled": 0,
+        "flash_enabled": 0,
+        "offline_enabled": 0,
+        "mobile_enabled": true,
+        "note": null,
+        "status": true,
+        "flag_show_in_site": 0,
+        "no_cash_back": false,
+        "void_bet": false,
+        "attributes": null,
+        "game_order": null,
+        "html_five_enabled": true,
+        "english_name": "HP Lottery",
+        "external_game_id": "HPL",
+        "clientid": null,
+        "moduleid": null,
+        "related_game_desc_id": null,
+        "enabled_freespin": 0,
+        "sub_game_provider": null,
+        "enabled_on_android": true,
+        "enabled_on_ios": true,
+        "flag_new_game": true,
+        "game_type_code": "lottery",
+        "demo_link": null
+    }
+]

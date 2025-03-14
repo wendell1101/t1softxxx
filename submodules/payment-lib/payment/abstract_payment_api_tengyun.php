@@ -1,0 +1,250 @@
+<?php
+require_once dirname(__FILE__) . '/abstract_payment_api.php';
+/**
+ * TENGYUN 腾云支付
+ *
+ * * TENGYUN_ALIPAY_PAYMENT_API, ID: 5320
+ * * TENGYUN_WEIXIN_PAYMENT_API, ID: 5321
+ *
+ * Required Fields:
+ * * URL
+ * * Account
+ * * Key
+ *
+ * Field Values:
+ * * URL: http://47.92.71.58/Pay_PayApi_PayRequest.html
+ * * Account: ## Merchant ID ##
+ * * Key: ## Secret Key ##
+ *
+ *
+ * @category Payment
+ * @copyright 2013-2022 tot
+ */
+abstract class Abstract_payment_api_tengyun extends Abstract_payment_api {
+    const QRCODETYPE_DYNAMIC_CODE = '1';
+    const QRCODETYPE_STATIC_CODE  = '2';
+    const PAYTYPE_ALIPAY   = '1';
+    const PAYTYPE_WEIXIN   = '2';
+    const PAYTYPE_UNIONPAY = '3';
+    
+    const RESULT_CODE_SUCCESS = '0';
+    const RETURN_SUCCESS_CODE = 'success';
+
+
+    public function __construct($params = null) {
+        parent::__construct($params);
+    }
+
+    # Implement these to specify pay type
+    protected abstract function configParams(&$params, $direct_pay_extra_info);
+    protected abstract function processPaymentUrlForm($params);
+
+    public function generatePaymentUrlForm($orderId, $playerId, $amount, $orderDateTime, $playerPromoId = null, $enabledSecondUrl = true, $bankId = null) {
+        if ($this->shouldRedirect($enabledSecondUrl)) {
+            $url = $this->CI->utils->getPaymentUrl($this->getSystemInfo('second_url'), $this->getPlatformCode(), $amount, $playerId, $playerPromoId, false, $bankId, $orderId);
+            $result = array('success' => true, 'type' => self::REDIRECT_TYPE_URL, 'url' => $url);
+            return $result;
+        }
+
+        $order  = $this->CI->sale_order->getSaleOrderById($orderId);
+        $params = array();
+
+        $params['merchaccount'] = $this->getSystemInfo('account');
+        $params['qrcodetype']   = self::QRCODETYPE_STATIC_CODE;
+        $params['callback']     = $this->getNotifyUrl($orderId);
+        $params['amount']       = $this->convertAmountToCurrency($amount);
+        $params['ordersn']      = $order->secure_id;
+        $params['iparea']       = $this->getClientIp();
+        $params['productname']  = 'Deposit';
+        
+        $this->configParams($params, $order->direct_pay_extra_info);
+        $params['sign'] = $this->sign($params);
+
+        $this->CI->utils->debug_log('=====================tengyun generatePaymentUrlForm params', $params);
+        return $this->processPaymentUrlForm($params);
+    }
+
+    protected function processPaymentUrlFormPost($params) {
+        return array(
+            'success' => true,
+            'type' => self::REDIRECT_TYPE_FORM,
+            'url' => $this->getSystemInfo('url'),
+            'params' => $params,
+            'post' => true,
+        );
+    }
+
+    protected function processPaymentUrlFormUrl($params) {
+        $response = $this->submitPostForm($this->getSystemInfo('url'), $params, false, $params['ordersn']);
+        $response = json_decode($response, true);
+        $this->CI->utils->debug_log('=====================tengyun processPaymentUrlFormUrl response', $response);
+
+        if($response['code'] == self::RESULT_CODE_SUCCESS && isset($response['data']['qrcodeurl'])) {
+            return array(
+                'success' => true,
+                'type' => self::REDIRECT_TYPE_QRCODE,
+                'image_url' =>$response['data']['qrcodeurl']
+            );
+        }
+        else if(isset($response['msg'])) {
+            return array(
+                'success' => false,
+                'type' => self::REDIRECT_TYPE_ERROR, # will be redirected to a view for error display
+                'message' => 'code: '.$response['code'].'=> '.$response['msg']
+            );
+        }
+        else {
+            return array(
+                'success' => false,
+                'type' => self::REDIRECT_TYPE_ERROR, # will be redirected to a view for error display
+                'message' => lang('Invalidte API response')
+            );
+        }
+    }
+
+
+    public function callbackFromServer($orderId, $params) {
+        $response_result_id = parent::callbackFromServer($orderId, $params);
+        return $this->callbackFrom('server', $orderId, $params, $response_result_id);
+    }
+
+    public function callbackFromBrowser($orderId, $params) {
+        $response_result_id = parent::callbackFromBrowser($orderId, $params);
+        return $this->callbackFrom('browser', $orderId, $params, $response_result_id);
+    }
+
+    private function callbackFrom($source, $orderId, $params, $response_result_id) {
+        $result = array('success' => false, 'next_url' => null, 'message' => lang('error.payment.failed'));
+        $order = $this->CI->sale_order->getSaleOrderById($orderId);
+        $processed = false;
+
+        $this->CI->utils->debug_log("=====================tengyun callbackFrom $source params", $params);
+
+        if($source == 'server'){
+            if (!$order || !$this->checkCallbackOrder($order, $params, $processed)) {
+                return $result;
+            }
+        }
+
+        # Update order payment status and balance
+        $success = true;
+
+        # Update player balance based on order status
+        # if it's STATUS_SETTLED or STATUS_BROWSER_CALLBACK, put log, and ignore
+        $orderStatus = $this->CI->sale_order->getSaleOrderStatusById($orderId);
+        if ($orderStatus == Sale_order::STATUS_BROWSER_CALLBACK || $orderStatus == Sale_order::STATUS_SETTLED) {
+            $this->CI->utils->debug_log('callbackFrom' . ucfirst($source) . ', already get callback for order:' . $order->id, $params);
+            if ($source == 'server' && $order->status == Sale_order::STATUS_BROWSER_CALLBACK) {
+                $this->CI->sale_order->setStatusToSettled($orderId);
+            }
+        } else {
+            # update player balance
+            $this->CI->sale_order->updateExternalInfo($order->id, $params['ordersn'], '', null, null, $response_result_id);
+            if ($source == 'browser') {
+                $success = $this->CI->sale_order->browserCallbackSaleOrder($order->id, 'auto broswer callback ' . $this->getPlatformCode(), false);
+            } elseif ($source == 'server') {
+                $this->approveSaleOrder($order->id, 'auto server callback ' . $this->getPlatformCode(), false);
+            }
+        }
+
+        $result['success'] = $success;
+        if ($processed) {
+            $result['message'] = self::RETURN_SUCCESS_CODE;
+        } else {
+            $result['return_error'] = 'Error';
+        }
+
+        if ($source == 'browser') {
+            $result['next_url'] = $this->getPlayerBackUrl();
+            $result['go_success_page'] = true;
+        }
+
+        return $result;
+    }
+
+    private function checkCallbackOrder($order, $fields, &$processed = false) {
+        $requiredFields = array(
+            'updatetime', 'amount', 'ordersn', 'out_trade_id', 'sign', 'paystatus'
+        );
+
+        foreach ($requiredFields as $f) {
+            if (!array_key_exists($f, $fields)) {
+                $this->writePaymentErrorLog("=====================tengyun checkCallbackOrder Missing parameter: [$f]", $fields);
+                return false;
+            }
+        }
+
+        # is signature authentic?
+        if (!$this->sign($fields)) {
+            $this->writePaymentErrorLog('=====================tengyun checkCallbackOrder Signature Error', $fields);
+            return false;
+        }
+
+        $processed = true; # processed is set to true once the signature verification pass
+
+        if ($fields['amount'] != $this->convertAmountToCurrency($order->amount)) {
+            $this->writePaymentErrorLog("======================tengyun checkCallbackOrder Payment amount is wrong, expected [$order->amount]", $fields);
+            return false;
+        }
+
+        if ($fields['ordersn'] != $order->secure_id) {
+            $this->writePaymentErrorLog("======================tengyun checkCallbackOrder order IDs do not match, expected [$order->secure_id]", $fields);
+            return false;
+        }
+
+        # everything checked ok
+        return true;
+    }
+
+    public function directPay($order = null) {
+        return array('success' => false); # direct pay not supported by this API
+    }
+
+    #sign
+    private function sign ($array){
+        $key_id = $this->getSystemInfo('key');
+        $data   = md5(number_format($array['amount'],2). $array['ordersn']);
+        $key[]  = "";
+        $box[]  = "";
+        $pwd_length =strlen($key_id);
+        $data_length =strlen($data);
+        $cipher = "";
+        for($i =0; $i <256; $i++)
+        {
+            $key[$i]=ord($key_id[$i % $pwd_length]);
+            $box[$i]= $i;
+        }
+        for($j = $i =0; $i <256; $i++)
+        {
+            $j =($j + $box[$i]+ $key[$i])%256;
+            $tmp = $box[$i];
+            $box[$i]= $box[$j];
+            $box[$j]= $tmp;
+        }
+        for($a = $j = $i =0; $i < $data_length; $i++)
+        {
+            $a =($a +1)%256;
+            $j =($j + $box[$a])%256;
+            $tmp = $box[$a];
+            $box[$a]= $box[$j];
+            $box[$j]= $tmp;
+            $k = $box[(($box[$a]+ $box[$j])%256)];
+            $cipher .=chr(ord($data[$i])^ $k);
+        }
+        $sign = md5($cipher);
+        return $sign;
+    }
+
+    # -- Private functions --
+    private function getNotifyUrl($orderId) {
+        return parent::getCallbackUrl('/callback/process/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+
+    private function getReturnUrl($orderId) {
+        return parent::getCallbackUrl('/callback/browser/success/' . $this->getPlatformCode() . '/' . $orderId);
+    }
+
+    protected function convertAmountToCurrency($amount) {
+        return number_format($amount, 2, '.', '');
+    }
+}

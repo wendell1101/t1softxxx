@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# An example hook script to prepare a packed repository for use over
+# dumb transports.
+#
+# To enable this hook, rename this file to "post-update".
+
+#echo $GIT_DIR > /tmp/testhook
+echo runing create_links.sh ...
+/bin/bash ./create_links.sh
+
+# echo runing migration ...
+# cd ./admin
+# ./migrate.sh
+# cd ..
+
+echo done
+

@@ -1,0 +1,375 @@
+body {
+    background-color: #000;
+    margin: 0;
+    padding: 0;
+}
+.lucky-wheel {
+    position: fixed;
+    left: 17px;
+    bottom: 45px;
+    background: none;
+    border: none;
+    padding: 15px 0;
+    z-index: 1000;
+}
+.lucky-wheel a {
+    color: #cca352;
+    text-decoration: none;
+}
+.lucky-wheel .preview-trigger {
+    transition: all 1s;
+}
+.lucky-wheel .preview-trigger.hide {
+    transform: translateX(-9999px);
+}
+.lucky-wheel .preview-trigger .close {
+    width: 19px;
+    height: 19px;
+    margin-right: 2px;
+    left: -10px;
+    top: 0px;
+    position: absolute;
+    margin-top: -7px;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 100%;
+    z-index: 500;
+}
+.lucky-wheel .preview-trigger .close:before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 9px;
+    width: 2px;
+    height: 11px;
+    border-radius: 2px;
+    background-color: #333;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.lucky-wheel .preview-trigger .close:after {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 9px;
+    width: 2px;
+    height: 11px;
+    border-radius: 2px;
+    background-color: #333;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.lucky-wheel .title {
+    font-size: 14px;
+    text-align: center;
+    background: #886a37;
+    color: white;
+    margin-top: 7px;
+    padding: 2px 10px;
+    margin-bottom: 10px;
+}
+.lucky-wheel .preview {
+    color: transparent;
+    padding: 0;
+    text-align: center;
+    display: block;
+    position: relative;
+    cursor: pointer;
+}
+.lucky-wheel .preview img {
+    width: 130px;
+}
+.lucky-wheel .preview .badge {
+    position: absolute;
+    right: 0;
+    top: 5px;
+    background: #FB3800;
+    color: #fff;
+    border-radius: 50px;
+    width: 30px;
+    height: 30px;
+    line-height: 1.9;
+    z-index: 2;
+    box-shadow: -0.5px 0.5px #000;
+}
+.luckywheel-modal {
+    background-color: rgba(0, 0, 0, .1);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    z-index: 1010;
+    min-width: 100vw;
+    min-height: 85vh;
+}
+.luckywheel-modal.active {
+    display: flex;
+}
+.luckywheel-modal .luckywheel-content {
+    border: 1px solid #776748;
+    background-color: #222;
+    width: 95%;
+    max-width: 600px;
+    min-height: 200px;
+    max-height: 96%;
+    background-color: #fff;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+    z-index: 5000;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin-bottom: 50px;
+    margin-top: 10px;
+}
+.luckywheel-modal .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -7px;
+    margin-top: -7px;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    -webkit-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out;
+    z-index: 500;
+}
+.luckywheel-modal .close:hover {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+.luckywheel-modal .close::before,
+.luckywheel-modal .close::after {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 15px;
+    width: 2px;
+    height: 15px;
+    border-radius: 2px;
+    background-color: #333;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.luckywheel-modal .close::after {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.luckywheel-modal .luckywheel-content .luckywheel-details img {
+    border-radius: 7px;
+    max-height: 420px;
+    width: 100%;
+}
+
+.overlay-fog {
+    background-color: rgba(0, 0, 0, .8);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+.luckywheel-bonus.terms {
+    background-color: rgba(0, 0, 0, .1);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    z-index: 1010;
+    min-width: 100vw;
+    min-height: 85vh;
+}
+.luckywheel-bonus.terms.active {
+    display: flex;
+}
+.luckywheel-bonus.spin-wheel {
+    background-color: rgba(0, 0, 0, .1);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    transition: all .5s;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    z-index: 1010;
+    min-width: 100vw;
+    min-height: 85vh;
+}
+.luckywheel-bonus.spin-wheel.active {
+    display: flex;
+}
+.luckywheel-bonus .bonus-content {
+    border: 1px solid #776748;
+    background-color: #222;
+    color: #fff;
+    width: 95%;
+    max-width: 600px;
+    min-height: 200px;
+    max-height: 96%;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 4px rgba(0, 0, 0, .3);
+    z-index: 5000;
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    margin-bottom: 50px;
+    margin-top: 10px;
+}
+.luckywheel-bonus .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-right: -7px;
+    margin-top: -7px;
+    cursor: pointer;
+    background-color: #fff;
+    border-radius: 100%;
+    width: 32px;
+    height: 32px;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    -webkit-transition: all .1s ease-in-out;
+    transition: all .1s ease-in-out;
+    z-index: 500;
+    opacity: 1;
+}
+.luckywheel-bonus .close:hover {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}
+.luckywheel-bonus .close::before,
+.luckywheel-bonus .close::after {
+    content: "";
+    position: absolute;
+    top: 9px;
+    left: 15px;
+    width: 2px;
+    height: 15px;
+    border-radius: 2px;
+    background-color: #333;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.luckywheel-bonus .close::after {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+.luckywheel-bonus  .bonus-header {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #000;
+    padding: 10px 20px;
+    border-radius: 7px 7px 0 0;
+}
+.luckywheel-bonus  .bonus-header .back {
+    color: #cca352;
+}
+.luckywheel-bonus  .bonus-header .back span{
+    font-size: 22px;
+    margin-right: 5px;
+}
+.luckywheel-bonus  .bonus-header .header-text a {
+    color: #cca352;
+    text-decoration: none;
+    font-size: 12px;
+}
+.luckywheel-bonus  .bonus-header .header-text p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+.luckywheel-bonus .bonus-body {
+    min-height: 300px;
+}
+.luckywheel-bonus .bonus-body .main-content {
+    padding: 20px;
+    background: #353535;
+    font-size: 20px;
+}
+.luckywheel-bonus .bonus-body .main-content h2 {
+    margin: 0;
+}
+.luckywheel-bonus .bonus-body .details {
+    padding: 10px 20px 30px;
+    overflow-y: auto;
+    max-height: 174px;
+}
+.luckywheel-bonus .bonus-body .details .subtitle {
+    color: #cca352;
+    font-size: 18px;
+}
+.luckywheel-bonus .bonus-body .promo-received {
+    text-align: center;
+    font-size: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,.1);
+    margin-top: 10px;
+}
+.luckywheel-bonus .bonus-body .promo-received p {
+    margin: 0;
+    margin-bottom: 5px;
+}
+.luckywheel-bonus .bonus-footer {
+    padding: 20px;
+    color: #aaa;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.luckywheel-bonus .bonus-footer button {
+    background: #3e2a06;
+    background: -moz-linear-gradient(left, #3e2a06 0%, #795b27 44%, #fed981 100%);
+    background: -webkit-linear-gradient(left, #3e2a06 0%, #795b27 44%, #fed981 100%);
+    background: linear-gradient(to right, #3e2a06 0%, #795b27 44%, #fed981 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#3e2a06', endColorstr='#fed981', GradientType=1);
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    padding: 15px;
+}

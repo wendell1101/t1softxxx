@@ -1,0 +1,55 @@
+<?php
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Migration_Add_table_google_players_20220121 extends CI_Migration {
+    private $tableName = 'google_players';
+
+    public function up() {
+        $fields = array(
+            'id' => [
+                'type' => 'BIGINT',
+                'null' => false,
+                'auto_increment' => true
+            ],
+            'google_user_id' => array(
+                'type' => 'VARCHAR',
+                'constraint' => '100',
+                'null' => false,
+            ),
+            'google_username' => array(
+                'type' => 'VARCHAR',
+                'constraint' => '100',
+                'null' => false,
+            ),
+            'id_token' => array(
+                'type' => 'TEXT',
+                'null' => false,
+            ),
+            'player_id' => array(
+                'type' => 'INT',
+                'unsigned' => TRUE,
+                'constraint' => '10',
+                'null' => true,
+            ),
+            'created_at DATETIME DEFAULT CURRENT_TIMESTAMP' => array(
+                'null' => false,
+            ),
+            'updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP' => array(
+                'null' => false,
+            )
+        );
+
+
+        if(!$this->db->table_exists($this->tableName)){
+            $this->dbforge->add_field($fields);
+            $this->dbforge->add_key('id', TRUE);
+            $this->dbforge->create_table($this->tableName);
+            # Add Index
+            $this->load->model('player_model');
+            $this->player_model->addUniqueIndex($this->tableName, 'idx_google_user_id', 'google_user_id');
+            $this->player_model->addUniqueIndex($this->tableName, 'idx_player_id', 'player_id');
+        }
+    }
+
+}

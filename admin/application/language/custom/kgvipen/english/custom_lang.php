@@ -1,0 +1,36 @@
+<?php
+$lang['footer.01'] = "About us";
+$lang['footer.02'] = "Privacy policy";
+$lang['footer_responsible_gambling'] = 'Responsible gambling';
+$lang['footer_terms_and_conditions'] = 'Terms & conditions';
+$lang['footer_general_disclaimer'] = 'General disclaimer';
+$lang['footer_games_rules'] = 'Rules';
+$lang['footer_help_centre'] = 'Help centre';
+$lang['Instant Message 1'] = "Instant Message 1 (optional)";
+$lang['Instant Message 2']='Facebook';
+$lang['Instant Message 3']='Telegram';
+$lang['Affiliate Code'] = "Affiliate Code (Optional)";
+$lang['ID Card Number'] = "ID Card Number (Optional)";
+$lang['Daily Limit'] = "";
+$lang['Please Input Withdrawal Amount For Placeholder'] = "";
+$lang['Withdraw pending ask customer service'] = '【If your withdrawal is still pending after 24 hours, you can contact customer support for an update】';
+$lang['notify.37'] = 'Make your first deposit now to take advantage of this exciting offer';
+$lang['a_reg.37.hint'] = 'Please input Province\City\District\Town\Village\Road';
+$lang['a_reg.43.hint'] = 'Please input Floor\Unit\Number';
+//$lang['email_after_verification_subject'] = 'Customer ID Requirement upon Registration';
+$lang['email_after_verification_subject'] = '注册完后要求客户ID';
+$lang['email_promotion_subject'] = '优惠活动';
+$lang['PEP'] = "Identity Check";
+$lang['player_center_withdrawal_page_fee_hint'] = '<p class="deposit-limit">KGVIP于2020年7月1日0:00起（UTC+0）进行取款手续费调整，会员根据各自等级获取每月的免费取款额度，具体可在网站首页会员制信息页面查看。<a href="https://www.kgvip.com/zh/promotions/kgviployalty/">详情……</a></p>';
+$lang['attached_file'] = "KYC Documents";
+//custom language for PEP TO ID
+$lang['PEP Authentication API is enable please check the PEP risk score criteria.'] = 'ID Authentication API is enable please check the ID risk score criteria.';
+$lang['Show PEP Authentication'] = 'Show ID Authentication';
+$lang['Manual Generate PEP Authentication'] = 'Manual Generate ID Authentication';
+$lang['PEP Authentication'] = 'ID Authentication';
+$lang['financial_account.bankaccount.walletaddress'] = 'Wallet Address';
+$lang['Generate New PEP Authentication'] = 'Generate New ID Authentication';
+$lang['Are you sure you want to generate PEP Authentication manually?'] = 'Are you sure you want to generate ID Authentication manually?';
+$lang['You dont have permission to view PEP Authentication details.'] = 'You dont have permission to view ID Authentication details.';
+$lang['not_allowed_kyc_risk_score_message'] = "In order to keep your account information secure, you will need to upload your ID. If you are unable to upload successfully, please contact our KYC customer service immediately. We apologize for any inconvenience caused.";
+$lang['Sorry, your last withdraw request is not done, so you can\'t start new request'] = 'Sorry, you can\'t apply for new withdrawal order due to there\'s still one order is processing.';
